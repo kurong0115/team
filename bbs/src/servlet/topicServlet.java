@@ -16,6 +16,7 @@ import bean.PageBean;
 import bean.Reply;
 import bean.Topic;
 import bean.User;
+import biz.BizException;
 import biz.replyBizImpl;
 import biz.topicBizImpl;
 import utils.Myutil;
@@ -247,8 +248,15 @@ public class topicServlet extends HttpServlet {
 
 			topic.setUid(user.getUid() );
 		}
-		
-		int post = tbi.post(topic);
+						
+		Integer post = null;
+		try {
+			post = tbi.post(topic);
+		} catch (BizException e) {
+			response.getWriter().print("<script>'ÄúÒÑ±»½ûÑÔ'</script>");
+			response.sendRedirect("topic?flag=topicList&boardid="+topic.getBoardid());
+			return;
+		}
 		
 		if(post>0) {
 			response.sendRedirect("topic?flag=topicList&boardid="+topic.getBoardid());
