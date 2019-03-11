@@ -8,6 +8,8 @@
 		<TABLE cellSpacing="0" cellPadding="0" width="100%">
 			<TR class="tr2" align="center">
 				<TD colSpan="2">论坛</TD>
+				
+				<TD style="WIDTH: 10%;">操作</TD>
 				<TD style="WIDTH: 10%;">主题</TD>
 				<TD style="WIDTH: 30%">最后发表</TD>
 			</TR>
@@ -21,7 +23,7 @@
 					<%--  循环整4个Map中的List<Board> 取出大板块名--%>
 					<c:forEach items="${allBoards.value}" var="boards">
 						<TR class="tr3">
-							<TD colspan="4">${boards.boardname}</TD>
+							<TD colspan="5">${boards.boardname}</TD>
 						</TR>
 						
 						<%--  重新循环整个Map<Integer, List<Board>> 判断找出key值与大板块的boardid相同的list集合--%>
@@ -35,7 +37,12 @@
 										<TD width="5%">&nbsp;</TD>
 										<TH align="left"><IMG
 											src="<%=request.getContextPath()%>/image/board.gif"> <A
-											href="topic?pages=1&flag=topicList&boardid=${sonBoard.boardid }">${sonBoard.boardname}</A></TH>
+											href="topic?pages=1&flag=topicList&boardid=${sonBoard.boardid }">${sonBoard.boardname}</A>
+										</TH>
+										<td align="center"> 
+											<a href="topic?flag=topicHostList&boardid=${sonBoard.boardid }">查看板块热帖</a>
+										</td>
+
 										<TD align="center">${sonBoard.topicsum}</TD>
 										<TH><SPAN> <A href="<%=request.getContextPath()%>/topic?flag=topicDetail&topicid=${sonBoard.recenttopicid }&boardid=${sonBoard.boardid}">${sonBoard.recenttopictitle}
 											</A>

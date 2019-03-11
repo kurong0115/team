@@ -15,6 +15,8 @@
 	<DIV>
 		<A href="<%=request.getContextPath() %>/pages/answer.jsp?pages=${param.pages }&topicid=<%=request.getParameter("topicid")%>"><IMG src="<%=request.getContextPath() %>/image/reply.gif"  border="0" id=td_post></A> 
 		<A href="<%=request.getContextPath() %>/pages/post.jsp"><IMG src="<%=request.getContextPath() %>/image/post.gif"   border="0" id=td_post></A>
+		<A href="<%=request.getContextPath() %>/topic?flag=topicHostList&boardid=${board.boardid }">返回板块热帖</A>
+	
 	</DIV>
 
 	<!--      本页主题的标题        -->

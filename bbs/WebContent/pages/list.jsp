@@ -30,12 +30,13 @@
 	<DIV class="t">
 		<TABLE cellSpacing="0" cellPadding="0" width="100%">		
 			<TR>
-				<TH class="h" style="WIDTH: 100%" colSpan="5"><SPAN>&nbsp;</SPAN></TH>
+				<TH class="h" style="WIDTH: 100%" colSpan="6"><SPAN>&nbsp;</SPAN></TH>
 			</TR>
 <!--       表 头           -->
 			<TR class="tr2">
 				<TD>&nbsp;</TD>
-				<TD style="WIDTH: 70%" align="center">文章</TD>
+				<TD style="WIDTH: 50%" align="center">文章</TD>
+				<TD style="WIDTH: 20%" align="center">发布时间</TD>
 				<TD style="WIDTH: 10%" align="center">操作</TD>
 				<TD style="WIDTH: 10%" align="center">作者</TD>
 				<TD style="WIDTH: 10%" align="center">回复</TD>
@@ -47,6 +48,7 @@
 				<TD style="FONT-SIZE: 15px" >
 					<A href="<%=request.getContextPath()%>/topic?flag=topicDetail&topicid=${tp.topicid}&pages=${pagebean.pages}&replyPages=1">${tp.title}</A>
 				</TD>
+				<td align="center">${tp.publishtime}</td>
 				<c:if test="${tp.uname==user.uname }">
 					<TD style="FONT-SIZE: 12px" align="center">
 						<a href="<%=request.getContextPath()%>/topic?flag=topicDetail&topicid=${tp.topicid}&pages=${pagebean.pages}&replyPages=1" >详情</a>
