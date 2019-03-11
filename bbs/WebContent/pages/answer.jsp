@@ -1,0 +1,39 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="header.jsp"  %>
+<script type="text/javascript" src="<%=request.getContextPath()%>/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+	window.onload=function(){
+		CKEDITOR.replace('content');
+	}
+</script>
+<DIV>
+	&gt;&gt;<B><a href="<%=request.getContextPath() %>/index.jsp">论坛首页</a></B>&gt;&gt;
+	<B><a href="topic?flag=topicList&boardid=${board.boardid }&pages=${param.pages }">${board.boardname}</a>
+	&gt;&gt;回复话题</B>
+</DIV>
+
+<div class="t" style="margin-top: 15px" align="center">
+	<center>
+		回复帖子
+		<hr width=80%>
+		
+		<form action="<%=request.getContextPath() %>/topic" method="post">
+			<input type="hidden" name="flag" value="answer" />
+			<input type="hidden" name="uid" value="${user.uid}" />
+			<input type="hidden" name="pages" value="${param.pages}" />
+			<input type="hidden" name="topicid" value="<%=request.getParameter("topicid")%>" />
+			<br />
+			内容&nbsp;
+			<textarea name="content" row="5" cols="50" value="${param.content}"></textarea>
+			
+			<br />
+			
+			<input class="btn" tabIndex="6"  type="submit" value="回复"> 
+			<font>${msg}</font>
+		</form>
+	</center>
+</div>
+
+
+<%@ include file="bottom.jsp"  %>
