@@ -64,7 +64,7 @@ public class userServlet extends HttpServlet {
 	//ÍË³ö
 	private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session=request.getSession();
-		session.setAttribute("user", "");
+		session.setAttribute("user", null);
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 		
 	}

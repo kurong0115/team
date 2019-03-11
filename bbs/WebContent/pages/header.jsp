@@ -27,7 +27,9 @@
 		if(session.getAttribute("user")!=null ){
 	%>
 			<DIV class="h" id="loginresult">
-				欢迎您: ${user.uname}| <a href="<%=request.getContextPath() %>/bbsUser?flag=logout">退出</a>
+				欢迎您: ${user.uname} | 
+				<a href="<%=request.getContextPath() %>/*">个人中心</a> | 
+				<a href="<%=request.getContextPath() %>/bbsUser?flag=logout"> 退出 </a>
 			</DIV>
 	<%			
 		}else{
