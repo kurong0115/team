@@ -48,18 +48,18 @@ public class topicBizImpl {
 		UserInfo userinfo=ud.selectAll(topic.getUid());
 		System.out.println(userinfo);
 		//被禁言的时候不能发帖
-		if(userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
+		if(userinfo.getEndtime()!=null&&userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
 			throw new BizException("您已被禁言");
 		}
 		List<Map<String,Object>> list=sd.query();
 		//判断过滤前后的内容是否一致,如不,则增加用户的次数
 		String beforeTitle=topic.getTitle();
 		String beforeContent=topic.getContent();
-		String afterTitle=null;
-		String afterContent=null;
+		String afterTitle=beforeTitle;
+		String afterContent=beforeContent;
 		for(int i=0;i<list.size();i++) {
-			afterTitle=beforeTitle.replace((String)list.get(i).get("sname"), "**");
-			afterContent=beforeContent.replace((String)list.get(i).get("sname"), "**");
+			afterTitle=afterTitle.replace((String)list.get(i).get("sname"), "**");
+			afterContent=afterContent.replace((String)list.get(i).get("sname"), "**");
 		}
 		if(!beforeTitle.equals(afterTitle)||!beforeContent.equals(afterContent)) {
 			ud.addTime(topic.getUid());
@@ -152,7 +152,7 @@ public class topicBizImpl {
 	
 	
 	/**
-	 * ��ѯ��ǰ���ǰ10��topic
+	 * ��ѯ��ǰ���ǰ10��topic
 	 */
 	public List<Topic> findHostTopic(Topic topic) {
 		StringBuffer sql=new StringBuffer();
@@ -170,7 +170,7 @@ public class topicBizImpl {
 	}
 	
 	/**
-	 * ��ѯ��̳�ظ�����ǰ10��topic
+	 * ��ѯ��̳�ظ�����ǰ10��topic
 	 */
 	public List<Topic> findAllHostTopic() {
 		StringBuffer sql=new StringBuffer();

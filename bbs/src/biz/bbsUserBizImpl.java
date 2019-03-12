@@ -50,12 +50,21 @@ public class bbsUserBizImpl {
 		}
 	}
 	
+	public void addExpendInfo(User user) {
+		String sql="insert into tbl_userinfo values(?,0,null,null)";
+		db.executeUpdate(sql, user.getUid());
+	}
 	/**
 	 * ≤È—Ø”√ªß
 	 * @return
 	 */
 	public List<Map<String, Object>> findUSer() {
 		String sql="select uid,uname,head,date_format(regtime,'%Y-%m-%d %H:%i:%s') as regtime,gender from tbl_user";
+		return db.executeQuery(sql);
+	}
+
+	public List<Map<String, Object>> findUserInfo() {
+		String sql="select a.*,b.uname from tbl_userinfo a ,tbl_user b where a.uid=b.uid";
 		return db.executeQuery(sql);
 	}
 }
