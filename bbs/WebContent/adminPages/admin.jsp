@@ -19,7 +19,9 @@
 				}
 			}
 		];
-
+		
+		
+		
 		var bbsTopicTree=[
 			{
 				"id":1,
@@ -38,6 +40,7 @@
 				}
 			}
 		];
+		
 		
 		showTree("bbsUserTree",bbsUserTree);
 		showTree("bbsTopicTree",bbsTopicTree);

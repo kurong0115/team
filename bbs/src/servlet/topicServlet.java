@@ -16,6 +16,7 @@ import bean.PageBean;
 import bean.Reply;
 import bean.Topic;
 import bean.User;
+import biz.BizException;
 import biz.replyBizImpl;
 import biz.topicBizImpl;
 import utils.Myutil;
@@ -33,7 +34,6 @@ public class topicServlet extends HttpServlet {
 	
     public topicServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -301,8 +301,15 @@ public class topicServlet extends HttpServlet {
 
 			topic.setUid(user.getUid() );
 		}
-		
-		int post = tbi.post(topic);
+						
+		Integer post = null;
+		try {
+			post = tbi.post(topic);
+		} catch (BizException e) {
+			response.getWriter().print("<script  language='javascript'>'ÄúÒÑ±»½ûÑÔ'</script>");
+			response.sendRedirect("topic?flag=topicList&boardid="+topic.getBoardid());
+			return;
+		}
 		
 		if(post>0) {
 			response.sendRedirect("topic?flag=topicList&boardid="+topic.getBoardid());
@@ -354,7 +361,6 @@ public class topicServlet extends HttpServlet {
 	
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

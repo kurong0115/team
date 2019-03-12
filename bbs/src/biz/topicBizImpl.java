@@ -1,21 +1,26 @@
 package biz;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import bean.PageBean;
 import bean.Topic;
+import bean.UserInfo;
+import dao.StopDao;
+import dao.UserDao;
 import utils.JDBCHelp;
 import utils.Myutil;
 
 public class topicBizImpl {
 	
-	
+	private UserDao ud=new UserDao();
+	private StopDao sd=new StopDao();
 	JDBCHelp db=new JDBCHelp();
 	
 	/**
-	 * ²éÑ¯µ±Ç°°å¿éµÄËùÓĞtopic
+	 * ï¿½ï¿½Ñ¯ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½topic
 	 */
 	public List<Topic> findBoardTopic(Topic topic) {
 		StringBuffer sql=new StringBuffer();
@@ -36,9 +41,40 @@ public class topicBizImpl {
 				
 	}
 	/**
-	 * ·¢Ìû
+	 * ï¿½ï¿½ï¿½ï¿½
+	 * @throws BizException 
 	 */
-	public int post(Topic topic) {
+	public int post(Topic topic) throws BizException {
+		UserInfo userinfo=ud.selectAll(topic.getUid());
+		System.out.println(userinfo);
+		//è¢«ç¦è¨€çš„æ—¶å€™ä¸èƒ½å‘å¸–
+		if(userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
+			throw new BizException("æ‚¨å·²è¢«ç¦è¨€");
+		}
+		List<Map<String,Object>> list=sd.query();
+		//åˆ¤æ–­è¿‡æ»¤å‰åçš„å†…å®¹æ˜¯å¦ä¸€è‡´,å¦‚ä¸,åˆ™å¢åŠ ç”¨æˆ·çš„æ¬¡æ•°
+		String beforeTitle=topic.getTitle();
+		String beforeContent=topic.getContent();
+		String afterTitle=null;
+		String afterContent=null;
+		for(int i=0;i<list.size();i++) {
+			afterTitle=beforeTitle.replace((String)list.get(i).get("sname"), "**");
+			afterContent=beforeContent.replace((String)list.get(i).get("sname"), "**");
+		}
+		if(!beforeTitle.equals(afterTitle)||!beforeContent.equals(afterContent)) {
+			ud.addTime(topic.getUid());
+			userinfo.setTime(userinfo.getTime()+1);
+		}
+		
+		//æ¯å‘ä¸‰æ¬¡è„è¯ç¦è¨€ä¸€å¤©
+		if(userinfo.getTime()%3==0) {
+			ud.stopPost(userinfo.getUid());
+		}
+		
+		//æŠŠå†…å®¹è®¾ç½®æˆè¿‡æ»¤ä¹‹åçš„å†…å®¹
+		topic.setTitle(afterTitle);
+		topic.setContent(afterContent);
+		
 		String sql="insert into tbl_topic values(null,?,?,now(),now(),?,?)";
 		return db.executeUpdate(sql, topic.getTitle()
 							, topic.getContent()
@@ -48,7 +84,7 @@ public class topicBizImpl {
 	}
 	
 	/**
-	 * ²éÑ¯µ¥¸öÌû×ÓµÄÏêÇé
+	 * ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public Topic topicdetail(Topic topic) {
 		String sql="select * from ("+
@@ -70,7 +106,7 @@ public class topicBizImpl {
 	}
 	
 	/**
-	 * É¾³ıµ±Ç°Ìû×Ó
+	 * É¾ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
 	 */
 	public int delTopic(Topic topic) {
 		String sql1="delete from tbl_reply where topicid=?";
@@ -80,7 +116,7 @@ public class topicBizImpl {
 	}
 	
 	/**
-	 * ²éµ±Ç°°æ¿éÏÂÌù×ÓÊıÁ¿
+	 * ï¿½éµ±Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 */
 	public int findTopicCount( Topic topic ) {
 		String sql="select count(*) as total from tbl_topic where boardid=?";
@@ -91,17 +127,17 @@ public class topicBizImpl {
 	public PageBean<Topic> findPageBean(  Topic topic  ) {
 		PageBean<Topic> pb=new PageBean<>();
 		
-		//¸Ã°å¿éËùÓĞÌû×ÓµÄĞÅÏ¢
+		//ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½Ï¢
 		List<Topic> list = findBoardTopic( topic);
 		
-		//Ìû×ÓµÄ×Ü¼ÇÂ¼Êı
+		//ï¿½ï¿½ï¿½Óµï¿½ï¿½Ü¼ï¿½Â¼ï¿½ï¿½
 		int total=findTopicCount( topic);
 		
 		pb.setList(list);
 		
 		pb.setTotal((long)total);
 		
-		//×ÜÒ³Êı
+		//ï¿½ï¿½Ò³ï¿½ï¿½
 		int totalpages=total%topic.getPagesize()==0?total/topic.getPagesize():(total/topic.getPagesize()+1);
 		
 		if(totalpages==0) {
