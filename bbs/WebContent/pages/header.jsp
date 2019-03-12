@@ -31,7 +31,7 @@
 				欢迎您: ${user.uname} | 
 				<a href="<%=request.getContextPath() %>/*">个人中心</a> | 
 				<a href="<%=request.getContextPath() %>/bbsUser?flag=logout"> 退出 </a>
-				<a href="<%=request.getContextPath() %>" style="float: right; margin-right: 100px; font-size: 15px;">论坛热帖榜单</a>
+				<a href="<%=request.getContextPath() %>/topic?flag=allTopicTopList" style="float: right; margin-right: 100px; font-size: 15px;">论坛热帖榜单</a>
 				<a href="<%=request.getContextPath() %>" style="float: right; margin-right: 100px; font-size: 15px;">论坛风云人物</a>
 			</DIV>
 	<%			
@@ -40,7 +40,7 @@
 			<DIV class="h" id="loginresult">
 			您尚未　<a href="<%=request.getContextPath() %>/pages/login.jsp">登录</a>
 			&nbsp;| &nbsp; <A href="<%=request.getContextPath() %>/pages/reg.jsp">注册</A>
-			<a href="<%=request.getContextPath() %>" style="float: right; margin-right: 100px; font-size: 15px;">论坛热帖榜单</a>
+			<a href="<%=request.getContextPath() %>/topic?flag=allTopicTopList" style="float: right; margin-right: 100px; font-size: 15px;">论坛热帖榜单</a>
 			<a href="<%=request.getContextPath() %>" style="float: right; margin-right: 100px; font-size: 15px;">论坛风云人物</a>
 			</DIV>
 	<%

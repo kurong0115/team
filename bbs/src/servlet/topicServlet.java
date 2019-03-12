@@ -69,11 +69,25 @@ public class topicServlet extends HttpServlet {
 		case "topicHostList":
 			topicHostList(request, response);
 			break;
+		case "allTopicTopList":
+			allTopicTopList(request, response);
+			break;
 		default:
 			break;
 		}
 	}
 	
+	//论坛热帖
+	private void allTopicTopList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		List<Topic> findAllHostTopic = tbi.findAllHostTopic();
+		
+		HttpSession session=request.getSession();
+		session.setAttribute("pagebean", findAllHostTopic);
+		
+		request.getRequestDispatcher("/pages/hostList.jsp").forward(request, response);
+		
+	}
+
 	//每个板块前10的热帖
 	private void topicHostList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Board board=new Board();
@@ -198,8 +212,15 @@ public class topicServlet extends HttpServlet {
 		int uid = Integer.parseInt(request.getParameter("uid")) ;
 		int topicid = Integer.parseInt(request.getParameter("topicid")) ;
 		
-		Integer pages = Integer.parseInt(request.getParameter("pages"));
 		
+		Integer pages =0;
+		if(request.getParameter("pages")==null || "".equals(request.getParameter("pages"))) {
+			pages=1;
+		}else {
+			pages = Integer.parseInt(request.getParameter("pages"));
+			
+		}
+	
 		String content = request.getParameter("content");
 		topic.setUid(uid);
 		topic.setTopicid(topicid);
