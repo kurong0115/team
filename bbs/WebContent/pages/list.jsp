@@ -26,6 +26,8 @@
 		<a href="<%=request.getContextPath() %>/topic?pages=${pagebean.totalPage }&flag=finalPage&boardid=${param.boardid}">尾页</a>&nbsp;&nbsp;
 		</li>
 	</ul>
+	
+	<h1>66666</h1>
 
 	<DIV class="t">
 		<TABLE cellSpacing="0" cellPadding="0" width="100%">		
