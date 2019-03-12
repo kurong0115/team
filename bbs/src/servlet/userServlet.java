@@ -145,7 +145,7 @@ public class userServlet extends HttpServlet {
 			if(userLogin!=null && !"".equals(userLogin)) {
 				user=userLogin.get(0);
 				session.setAttribute("user", user);
-				
+				ubi.addExpendInfo(user);
 				//判断是否有回调路径
 				if(request.getSession().getAttribute("callbackPath")!=null) {
 					String path = (String) request.getSession().getAttribute("callbackPath");
