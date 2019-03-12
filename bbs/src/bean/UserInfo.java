@@ -10,7 +10,6 @@ public class UserInfo implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private Integer uid;
 	private Integer time;
-	private String canpost;
 	private Timestamp starttime;
 	private Timestamp endtime;
 	
@@ -44,19 +43,6 @@ public class UserInfo implements Serializable{
 	}
 
 
-
-	public String getCanpost() {
-		return canpost;
-	}
-
-
-
-	public void setCanpost(String canpost) {
-		this.canpost = canpost;
-	}
-
-
-
 	public Timestamp getStarttime() {
 		return starttime;
 	}
@@ -83,9 +69,12 @@ public class UserInfo implements Serializable{
 
 	@Override
 	public String toString() {
-		return "UserInfo [uid=" + uid + ", time=" + time + ", canpost=" + canpost + ", starttime=" + starttime
-				+ ", endtime=" + endtime + "]";
+		return "UserInfo [uid=" + uid + ", time=" + time + ", starttime=" + starttime + ", endtime=" + endtime + "]";
 	}
+
+
+
+	
 	
 	
 }

@@ -1,5 +1,6 @@
 package biz;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,9 +46,9 @@ public class topicBizImpl {
 	 */
 	public int post(Topic topic) throws BizException {
 		UserInfo userinfo=ud.selectAll(topic.getUid());
-		
+		System.out.println(userinfo);
 		//被禁言的时候不能发帖
-		if(userinfo.getCanpost().equals("false")) {
+		if(userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
 			throw new BizException("您已被禁言");
 		}
 		List<Map<String,Object>> list=sd.query();
