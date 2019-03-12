@@ -139,10 +139,33 @@ public class topicBizImpl {
 		
 		//ï¿½ï¿½Ò³ï¿½ï¿½
 		int totalpages=total%topic.getPagesize()==0?total/topic.getPagesize():(total/topic.getPagesize()+1);
+		
+		if(totalpages==0) {
+			totalpages=1;
+		}
 		pb.setTotalPage((long)totalpages);
 
 
 		return pb;
 		
+	}
+	
+	
+	/**
+	 * ²éÑ¯µ±Ç°°å¿éÇ°10µÄtopic
+	 */
+	public List<Topic> findHostTopic(Topic topic) {
+		StringBuffer sql=new StringBuffer();
+		
+		sql.append(" select * from ( select * from (select a.topicid,title,content,publishtime,modifytime,uid,uname,boardid, total as replycount ");
+		sql.append(" from		      (		     select topicid,title,content,date_format(publishtime,'%Y-%m-%d %H:%i:%s') as publishtime,date_format(modifytime,'%Y-%m-%d %H:%i:%s') as  modifytime,  tbl_user.uid,  uname,boardid ");
+		sql.append(" from tbl_topic  inner join tbl_user on tbl_topic.uid=tbl_user.uid where boardid=?  order by modifytime desc ) a ");
+		sql.append(" left join  (select topicid, count(*) as total from tbl_reply group by topicid) b on a.topicid=b.topicid   order by total desc )  d ) e limit 0,10");
+		List<Object> params=new ArrayList<>();
+		params.add(topic.getBoardid());
+		List<Map<String,Object>> executeQuery = db.executeQuery(sql.toString(), params);
+		
+		return Myutil.ListMapToJavaBean(executeQuery, Topic.class);
+				
 	}
 }

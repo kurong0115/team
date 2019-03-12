@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
-@WebFilter("/admin.jsp")
+@WebFilter("/adminPages/admin.jsp")
 public class adminFilter implements Filter {
 
    
@@ -37,7 +37,7 @@ public class adminFilter implements Filter {
 			HttpServletResponse res=(HttpServletResponse) response;
 			res.setContentType("text/html; charset=utf-8"); 
 			PrintWriter out = res.getWriter();
-			out.println("<script>alert('ÄúÉĞÎ´µÇÂ¼');location.href='adminPages/adminLogin.jsp';</script>");
+			out.println("<script>alert('ÄúÉĞÎ´µÇÂ¼');location.href='adminLogin.jsp';</script>");
 			out.flush();
 		}
 		chain.doFilter(request, response);
