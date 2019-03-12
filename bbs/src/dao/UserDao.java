@@ -39,8 +39,8 @@ public class UserDao {
 	 * @param user
 	 */
 	public void stopPost(Integer uid) {
-		String sql="update tbl_userinfo set canpost=?,starttime=?,endtime=? where uid=?";
-		db.executeUpdate(sql, "false",new Timestamp(System.currentTimeMillis()),
+		String sql="update tbl_userinfo set starttime=?,endtime=? where uid=?";
+		db.executeUpdate(sql,new Timestamp(System.currentTimeMillis()),
 				new Timestamp(System.currentTimeMillis()+24*60*60*1000),uid);
 	}
 	
@@ -49,8 +49,8 @@ public class UserDao {
 	 * @param user
 	 */
 	public void releasePost(Integer uid) {
-		String sql="update tbl_userinfo set canpost=?,starttime=null,endtime=null where uid=?";
-		db.executeUpdate(sql, "true",uid);
+		String sql="update tbl_userinfo set starttime=null,endtime=null where uid=?";
+		db.executeUpdate(sql, uid);
 	}
 	
 	/**

@@ -34,7 +34,6 @@ public class topicServlet extends HttpServlet {
 	
     public topicServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -253,7 +252,7 @@ public class topicServlet extends HttpServlet {
 		try {
 			post = tbi.post(topic);
 		} catch (BizException e) {
-			response.getWriter().print("<script>'您已被禁言'</script>");
+			response.getWriter().print("<script  language='javascript'>'您已被禁言'</script>");
 			response.sendRedirect("topic?flag=topicList&boardid="+topic.getBoardid());
 			return;
 		}
