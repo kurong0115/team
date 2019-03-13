@@ -29,6 +29,7 @@
 		</script>
 		<br/>
 		<INPUT class="btn"  tabIndex="6"  type="submit" value="登 录">
+		<a href="<%=request.getContextPath() %>/pages/resetpwd.jsp">忘记密码</a>
 		<br>
 		<font style="color: red;">${msg}</font>
 	</FORM>
