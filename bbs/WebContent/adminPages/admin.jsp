@@ -17,6 +17,14 @@
 					"url":"<iframe width='100%' height='100%' src='adminPages/admin-user.jsp'/>",
 					"iframe":""
 				}
+			},
+			{
+				"id":2,
+				"text":"用户禁言管理",
+				"attributes":{
+					"url":"<iframe width='100%' height='100%' src='adminPages/admin-userinfo.jsp'/>",
+					"iframe":""
+				}
 			}
 		];
 		
@@ -41,10 +49,27 @@
 			}
 		];
 		
-		
+		var bbsWordTree=[
+			{
+				"id":1,
+				"text":"敏感词添加",
+				"attributes":{
+					"url":"<iframe width='100%' height='100%' src='adminPages/adminAddWord.jsp'/>",
+					"iframe":""
+				}
+			},
+			{
+				"id":2,
+				"text":"敏感词删除",
+				"attributes":{
+					"url":"<iframe width='100%' height='100%' src=''/>",
+					"iframe":""
+				}
+			}
+		];
 		showTree("bbsUserTree",bbsUserTree);
 		showTree("bbsTopicTree",bbsTopicTree);
-		
+		showTree("bbsWordTree",bbsWordTree);
 		
 		function showTree(treeId,treeData) {
 			$("#"+treeId).tree({
@@ -95,7 +120,10 @@
 					<ul id="bbsTopicTree" class="easyui-tree">
 					</ul>
 				</div>
-				
+				<div title="敏感词管理" >
+					<ul id="bbsWordTree" class="easyui-tree">
+					</ul>
+				</div>
 			</div>
 		
 		</div>

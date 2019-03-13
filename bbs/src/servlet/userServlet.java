@@ -46,11 +46,22 @@ public class userServlet extends HttpServlet {
 		case "findUser":
 			findUser(request,response);
 			break;
+		case "findUserInfo":
+			findUserInfo(request,response);
+			break;
 		default:
 			break;
 		}
 	}
 	
+	//查询所有用户扩展信息
+	private void findUserInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		List<Map<String, Object>> userInfo= ubi.findUserInfo();
+		String jsonString=JSON.toJSONString(userInfo);
+		response.getWriter().append(jsonString);
+	}
+
+
 	//查询所有用户
 	private void findUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		List<Map<String, Object>> findUSer = ubi.findUSer();
@@ -105,6 +116,7 @@ public class userServlet extends HttpServlet {
 		
 		
 		int num = ubi.regUser(user);
+		ubi.addExpendInfo(user);
 		if(num==1) {
 			request.setAttribute("msg", "注册成功");
 			request.getRequestDispatcher("/pages/reg.jsp").forward(request, response);
@@ -133,7 +145,7 @@ public class userServlet extends HttpServlet {
 			if(userLogin!=null && !"".equals(userLogin)) {
 				user=userLogin.get(0);
 				session.setAttribute("user", user);
-				
+				ubi.addExpendInfo(user);
 				//判断是否有回调路径
 				if(request.getSession().getAttribute("callbackPath")!=null) {
 					String path = (String) request.getSession().getAttribute("callbackPath");
