@@ -11,6 +11,17 @@ public class User implements Serializable {
 	private String head;
 	private String regtime;
 	private Integer gender;
+	private Integer total;
+	
+
+	
+	public Integer getTotal() {
+		return total;
+	}
+
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
 
 	public int getUid() {
 		return uid;
@@ -79,9 +90,10 @@ public class User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "User [gender=" + gender + ", head=" + head + ", regtime="
-				+ regtime + ", uname=" + uname + ", upass=" + upass
-				+ ", uid=" + uid + "]";
+		return "User [uid=" + uid + ", uname=" + uname + ", upass=" + upass + ", head=" + head + ", regtime=" + regtime
+				+ ", gender=" + gender + ", total=" + total + "]";
 	}
+
+
 
 }

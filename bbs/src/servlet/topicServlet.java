@@ -72,11 +72,40 @@ public class topicServlet extends HttpServlet {
 		case "allTopicTopList":
 			allTopicTopList(request, response);
 			break;
+		case "personTop":
+			personTop(request, response);
+			break;
+		case "personTopTopic":
+			personTopTopic(request, response);
+			break;
 		default:
 			break;
 		}
 	}
 	
+	//风云人物的所有帖子
+	private void personTopTopic(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Integer uid = Integer.parseInt(request.getParameter("uid"));
+		topic .setUid(uid);
+		
+		List<Topic> personTopTopic = tbi.personTopTopic(topic);
+		HttpSession session=request.getSession();
+		session.setAttribute("personTopTopic", personTopTopic);
+		
+		request.getRequestDispatcher("/pages/personTopTopic.jsp").forward(request, response);
+	}
+
+	//风云人物
+	private void personTop(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		List<User> personTop = tbi.personTop();
+		
+		HttpSession session=request.getSession();
+		session.setAttribute("personTop", personTop);
+		
+		request.getRequestDispatcher("/pages/personTop.jsp").forward(request, response);
+		
+	}
+
 	//论坛热帖
 	private void allTopicTopList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Topic> findAllHostTopic = tbi.findAllHostTopic();
@@ -84,7 +113,7 @@ public class topicServlet extends HttpServlet {
 		HttpSession session=request.getSession();
 		session.setAttribute("pagebean", findAllHostTopic);
 		
-		request.getRequestDispatcher("/pages/hostList.jsp").forward(request, response);
+		request.getRequestDispatcher("/pages/allHostList.jsp").forward(request, response);
 		
 	}
 
