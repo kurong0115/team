@@ -171,7 +171,7 @@ public class topicBizImpl {
 	}
 	
 	/**
-	 * ��ѯ��̳�ظ�����ǰ10��topic
+	 * 论坛热帖
 	 */
 	public List<Topic> findAllHostTopic() {
 		StringBuffer sql=new StringBuffer();
