@@ -11,10 +11,10 @@
 		}
 	}
 	function isSamePwd() {
-		if(document.regForm.newpass.value!=document.regForm.newpass1.value){
+		if(document.pwdForm.newpass.value!=document.pwdForm.newpass1.value){
 			document.getElementById("samePwd").innerHTML="密码不一致";
 		}
-		if(document.regForm.newpass.value==document.regForm.newpass1.value){
+		if(document.pwdForm.newpass.value==document.pwdForm.newpass1.value){
 			document.getElementById("samePwd").innerHTML="";
 		}
 	}
@@ -61,7 +61,7 @@
 					action="<%=request.getContextPath() %>/bbsUser" method="post">
 		<input type="hidden" name="flag" value="pwdchange">
 		<br/>原&nbsp;密&nbsp;码 &nbsp;
-			<INPUT class="input" tabIndex="1" tryp="text" maxLength="20" size="20" name="upass" onblur="isusername(this)">
+			<INPUT class="input" tabIndex="1" tryp="text" maxLength="20" size="20" name="upass">
 			<font id="info" ></font>
 		<br/>新&nbsp;密&nbsp;码 &nbsp;
 			<INPUT class="input" tabIndex="2" type="password" maxLength="20" size="20" name="newpass">
