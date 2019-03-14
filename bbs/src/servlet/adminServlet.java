@@ -1,6 +1,9 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -9,22 +12,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.fastjson.JSON;
+
 import bean.TblAdmin;
 import biz.adminBizImpl;
+import dao.UserDao;
 
 @WebServlet("/admin")
 @MultipartConfig
 public class adminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    adminBizImpl abi=new adminBizImpl();
+    private UserDao ud=new UserDao();
+	
+    private adminBizImpl abi=new adminBizImpl();
     public adminServlet() {
-        super();
+        
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String flag = request.getParameter("flag");
-		
+		request.setCharacterEncoding("utf-8");
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/html; charset=UTF-8");
+		String flag = request.getParameter("flag");		
 		switch (flag) {
 		case "adminLogin":
 			adminLogin(request,response);
@@ -32,11 +41,54 @@ public class adminServlet extends HttpServlet {
 		case "loginOut":
 			loginOut(request,response);
 			break;
+		case "release":
+			releaseById(request,response);
+			break;
+		case "findAllWords":
+			findAllWords(request,response);
+			break;
+		case "delById":
+			delById(request,response);
+			break;
 		default:
 			break;
 		}
 	}
 	
+	/**
+	 * 根据sid删除对应的敏感词
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 */
+	private void delById(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String sid=request.getParameter("sid");
+		System.out.println("sid"+sid);
+		System.out.println("删除对应的敏感词");
+		int num=abi.delWordById(sid);		
+		if(num>0) {
+			response.getWriter().write("ok");
+		}else {
+			response.getWriter().write("no");
+		}		
+	}
+
+	/**
+	 * 查询所有的敏感词
+	 * @param request
+	 * @param response
+	 */
+	private void findAllWords(HttpServletRequest request, HttpServletResponse response) {
+		List<Map<String,Object>> list=abi.findAllWords();
+		String jsonString=JSON.toJSONString(list);
+		System.out.println(jsonString);
+		try {
+			response.getWriter().write(jsonString);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	//管理员登录
 	private void adminLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		TblAdmin admin=new TblAdmin();
@@ -49,6 +101,7 @@ public class adminServlet extends HttpServlet {
 		
 		admin = abi.login(admin);
 		if(admin!=null) {
+			ud.releaseAll();
 			session.setAttribute("admin", admin);
 			request.getRequestDispatcher("adminPages/admin.jsp").forward(request, response);
 		}else {
@@ -65,6 +118,18 @@ public class adminServlet extends HttpServlet {
 		request.getRequestDispatcher("adminPages/adminLogin.jsp").forward(request, response);
 	}
 	
+	//解除禁言
+		private void releaseById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			String uid=request.getParameter("uid");
+			int num=abi.releaseById(Integer.valueOf(uid));
+			if(num>0) {
+				System.out.println("删除成功");
+				response.getWriter().write("解除成功");
+			}else{
+				response.getWriter().write("解除失败");
+			}
+		}
+		
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

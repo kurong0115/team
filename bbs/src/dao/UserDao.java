@@ -48,9 +48,9 @@ public class UserDao {
 	 * ½â³ý½ûÑÔ
 	 * @param user
 	 */
-	public void releasePost(Integer uid) {
+	public int releasePost(Integer uid) {
 		String sql="update tbl_userinfo set starttime=null,endtime=null where uid=?";
-		db.executeUpdate(sql, uid);
+		return db.executeUpdate(sql, uid);
 	}
 	
 	/**
@@ -62,5 +62,10 @@ public class UserDao {
 		String sql="select * from tbl_userinfo where uid=?";
 		List<Map<String,Object>> list=db.executeQuery(sql, uid);
 		return Myutil.ListMapToJavaBean(list, UserInfo.class).get(0) ;
+	}
+	
+	public void releaseAll() {
+		String sql="UPDATE tbl_userinfo SET starttime=NULL,endtime=NULL WHERE endtime<NOW()";
+		db.executeUpdate(sql);
 	}
 }

@@ -62,7 +62,7 @@
 				"id":2,
 				"text":"敏感词删除",
 				"attributes":{
-					"url":"<iframe width='100%' height='100%' src=''/>",
+					"url":"<iframe width='100%' height='100%' src='adminPages/admin-delword.jsp'/>",
 					"iframe":""
 				}
 			}

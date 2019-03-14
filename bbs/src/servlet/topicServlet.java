@@ -306,8 +306,9 @@ public class topicServlet extends HttpServlet {
 		try {
 			post = tbi.post(topic);
 		} catch (BizException e) {
-			response.getWriter().print("<script  language='javascript'>'ÄúÒÑ±»½ûÑÔ'</script>");
-			response.sendRedirect("topic?flag=topicList&boardid="+topic.getBoardid());
+			request.setAttribute("postMsg", e.getMessage());
+			System.out.println(e.getMessage());
+			request.getRequestDispatcher("topic?flag=topicList&boardid="+topic.getBoardid()).forward(request, response);
 			return;
 		}
 		
