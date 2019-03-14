@@ -59,7 +59,7 @@
 	display: inline;
 }
 </style>
-<table width="89%" border="0" align="center" cellpadding="0"
+<table width="89%"  align="center" cellpadding="0"
 	cellspacing="0">
 	<tr>
 		<td class="show" width="243" height="50" align="center"
