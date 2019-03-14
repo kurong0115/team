@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,12 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.fastjson.JSON;
+
 import bean.Board;
 import bean.PageBean;
 import bean.Reply;
 import bean.Topic;
 import bean.User;
 import biz.BizException;
+import biz.boardBizImpl;
 import biz.replyBizImpl;
 import biz.topicBizImpl;
 import utils.Myutil;
@@ -32,6 +36,7 @@ public class topicServlet extends HttpServlet {
 	
 	replyBizImpl rbi=new replyBizImpl();
 	
+	boardBizImpl bbi=new boardBizImpl();
     public topicServlet() {
         super();
     }
@@ -78,11 +83,82 @@ public class topicServlet extends HttpServlet {
 		case "personTopTopic":
 			personTopTopic(request, response);
 			break;
+		case "showBigBoardList":
+			showBigBoardList(request, response);
+			break;
+		case "updateBigBoard":
+			updateBigBoard(request, response);
+			break;
+		case "addBigBoard":
+			addBigBoard(request, response);
+			break;
 		default:
 			break;
 		}
 	}
 	
+	//add bigBoard
+	@SuppressWarnings("unchecked")
+	private void addBigBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String boardname = request.getParameter("boardname");
+
+		Board board=new Board();
+		board.setBoardname(boardname);
+		
+		int addBigBoard = bbi.addBigBoard(board);
+		
+		@SuppressWarnings("rawtypes")
+		Map map=new HashMap<>();
+		
+		if(addBigBoard>0) {
+			map.put("code", 1);
+			
+		}else {
+			map.put("code", 0);
+		}
+		String jsonString = JSON.toJSONString(map);
+		System.out.println(jsonString);
+		response.getWriter().write(jsonString);
+	}
+
+	//update bigBoard
+	@SuppressWarnings("unchecked")
+	private void updateBigBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String boardname = request.getParameter("boardname");
+		
+		Integer boardid = Integer.parseInt(request.getParameter("boardid"));
+		
+		Board board=new Board();
+		board.setBoardid(boardid);
+		board.setBoardname(boardname);
+		
+		int updateBigBoard = bbi.updateBigBoard(board);
+		
+		@SuppressWarnings("rawtypes")
+		Map map=new HashMap<>();
+		
+		if(updateBigBoard>0) {
+			map.put("code", 1);
+			
+		}else {
+			map.put("code", 0);
+		}
+		String jsonString = JSON.toJSONString(map);
+		response.getWriter().write(jsonString);
+	}
+
+	//后台主板块管理
+	@SuppressWarnings("unchecked")
+	private void showBigBoardList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		List<Board> bigBoardList = tbi.bigBoardList();
+
+		@SuppressWarnings("rawtypes")
+		Map map=new HashMap<>();
+		map.put("rows", bigBoardList);
+		String jsonString = JSON.toJSONString(map);
+		response.getWriter().write(jsonString);
+	}
+
 	//风云人物的所有帖子
 	private void personTopTopic(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Integer uid = Integer.parseInt(request.getParameter("uid"));

@@ -33,15 +33,15 @@
 		var bbsTopicTree=[
 			{
 				"id":1,
-				"text":"主板块浏览",
+				"text":"主板块管理",
 				"attributes":{
-					"url":"<iframe width='100%' height='100%'  />",
+					"url":"<iframe width='100%' height='100%'  src='adminPages/bigBoard.jsp'/>",
 					"iframe":""
 				}
 			},
 			{
 				"id":2,
-				"text":"子板块浏览",
+				"text":"子板块管理",
 				"attributes":{
 					"url":"<iframe width='100%' height='100%'  />",
 					"iframe":""

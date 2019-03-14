@@ -68,25 +68,33 @@ public class userServlet extends HttpServlet {
 		
 		user = (User) session.getAttribute("user");
 		
+		System.out.println(user.getUpass());
+		
 		Integer uid = user.getUid();
 		String upass = request.getParameter("upass");
-		String newpass = request.getParameter("newpass");
-		//获取结果
-		Integer result = ubi.pwdchange(uid, upass, newpass);
-		//跳转页面
-		if( result == -2 ) {//表示原始密码输入错误，需要重新输入
+		if(upass.equals(user.getUpass())){
+			String newpass = request.getParameter("newpass");
+			
+			
+			//获取结果
+			Integer result = ubi.pwdchange(uid,newpass);
+			//跳转页面
+			if( result > 0  ) {//修改成功
+				String msg = "修改成功,请重新登录";
+				request.setAttribute("msg", msg);
+				request.getRequestDispatcher("pages/personal.jsp").forward(request, response);
+			}else {//修改失败
+				String msg = "由于服务器原因，密码修改失败";
+				request.setAttribute("msg", msg);
+				request.getRequestDispatcher("pages/personal.jsp").forward(request, response);
+			}
+		}else {
 			String msg = "原密码错误，请重新输入";
 			request.setAttribute("msg", msg);
 			request.getRequestDispatcher("pages/personal.jsp").forward(request, response);
-		}else if( result > 0  ) {//修改成功
-			String msg = "修改成功,请重新登录";
-			request.setAttribute("msg", msg);
-			request.getRequestDispatcher("pages/personal.jsp").forward(request, response);
-		}else {//修改失败
-			String msg = "由于服务器原因，密码修改失败";
-			request.setAttribute("msg", msg);
-			request.getRequestDispatcher("pages/personal.jsp").forward(request, response);
 		}
+		
+		
 	}
 	//查询所有用户扩展信息
 	private void findUserInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {

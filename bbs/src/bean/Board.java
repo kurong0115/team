@@ -11,8 +11,16 @@ public class Board implements Serializable {
 	private int boardid;
 	private String boardname;
 	private int parentid;
-
+	private int sonTotal;
 	
+
+	public int getSonTotal() {
+		return sonTotal;
+	}
+
+	public void setSonTotal(int sonTotal) {
+		this.sonTotal = sonTotal;
+	}
 
 	public int getTopicsum() {
 		return topicsum;
@@ -109,15 +117,15 @@ public class Board implements Serializable {
 	private String recenttopicusername;
 	private String recenttopicmodifytime;
 
+
 	@Override
 	public String toString() {
-		return "Board [boardid=" + boardid + ", boardname=" + boardname
-				+ ", parentid=" + parentid + ", recenttopicid=" + recenttopicid
-				+ ", recenttopicmodifytime=" + recenttopicmodifytime
-				+ ", recenttopictitle=" + recenttopictitle
-				+ ", recenttopicuserid=" + recenttopicuserid
-				+ ", recenttopicusername=" + recenttopicusername
-				+ ", topicsum=" + topicsum + "]";
+		return "Board [boardid=" + boardid + ", boardname=" + boardname + ", parentid=" + parentid + ", sonTotal="
+				+ sonTotal + ", topicsum=" + topicsum + ", recenttopicid=" + recenttopicid + ", recenttopictitle="
+				+ recenttopictitle + ", recenttopicuserid=" + recenttopicuserid + ", recenttopicusername="
+				+ recenttopicusername + ", recenttopicmodifytime=" + recenttopicmodifytime + "]";
 	}
+
+	
 
 }

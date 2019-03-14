@@ -32,6 +32,7 @@ public class adminServlet extends HttpServlet {
 		case "loginOut":
 			loginOut(request,response);
 			break;
+			
 		default:
 			break;
 		}
