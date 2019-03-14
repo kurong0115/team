@@ -1,5 +1,7 @@
 BODY {
 	FONT-SIZE: 12px;
+	width: 80%;
+	margin-left: 10%;
 }
 A {
 	COLOR: #2f5fa1; TEXT-DECORATION: none

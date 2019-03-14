@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 
 import bean.User;
 import biz.bbsUserBizImpl;
+import utils.Myutil;
 
 
 @WebServlet("/bbsUser")
@@ -43,17 +44,72 @@ public class userServlet extends HttpServlet {
 		case "logout":
 			logout(request,response);
 			break;
+		case "logAgain":
+			logAgain(request,response);
+			break;
 		case "findUser":
 			findUser(request,response);
 			break;
 		case "findUserInfo":
 			findUserInfo(request,response);
 			break;
+		case "pwdchange":
+			pwdchange(request,response);
+			break;
+		case "sendcode":
+			sendcode(request,response);
+			break;
 		default:
 			break;
 		}
 	}
-	
+	private void sendcode(HttpServletRequest request, HttpServletResponse response) {
+		//使用工具类发送验证码
+		String uname = request.getParameter("uname");
+		System.out.println("用户名为：" + uname);
+		User user = ubi.getemail(uname);
+		System.out.println("邮箱地址："+user.getEmail());
+		//发送邮件，返回验证码，并带回到前端界面
+		String code = Myutil.sendemail(user.getEmail());
+		request.getSession().setAttribute("code", code);
+		try {
+			response.getWriter().write(code);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+	//修改密码
+	private void pwdchange(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//获取参数
+		User user = new User();
+		
+		HttpSession session = request.getSession();
+		
+		user = (User) session.getAttribute("user");
+		
+		Integer uid = user.getUid();
+		String upass = request.getParameter("upass");
+		String newpass = request.getParameter("newpass");
+		//获取结果
+		Integer result = ubi.pwdchange(uid, upass, newpass);
+		//跳转页面
+		if( result == -2 ) {//表示原始密码输入错误，需要重新输入
+			String msg = "原密码错误，请重新输入";
+			request.setAttribute("msg", msg);
+			request.getRequestDispatcher("pages/personal.jsp").forward(request, response);
+		}else if( result > 0  ) {//修改成功
+			String msg = "修改成功,请重新登录";
+			request.setAttribute("msg", msg);
+			request.getRequestDispatcher("pages/personal.jsp").forward(request, response);
+		}else {//修改失败
+			String msg = "由于服务器原因，密码修改失败";
+			request.setAttribute("msg", msg);
+			request.getRequestDispatcher("pages/personal.jsp").forward(request, response);
+		}
+	}
 	//查询所有用户扩展信息
 	private void findUserInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		List<Map<String, Object>> userInfo= ubi.findUserInfo();
@@ -79,7 +135,12 @@ public class userServlet extends HttpServlet {
 		request.getRequestDispatcher("index.jsp").forward(request, response);
 		
 	}
-
+	//修改密码后退出
+	private void logAgain(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session=request.getSession();
+		session.setAttribute("user", null);
+		request.getRequestDispatcher("pages/login.jsp").forward(request, response);	
+	}
 
 	//判断用户名是否存在
 	private void isUserName(HttpServletRequest request, HttpServletResponse response) throws IOException {

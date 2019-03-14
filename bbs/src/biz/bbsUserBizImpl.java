@@ -12,6 +12,20 @@ public class bbsUserBizImpl {
 
 	JDBCHelp db=new JDBCHelp();
 	
+	//用户修改密码
+		public Integer pwdchange(Integer uid ,String upass,String newpass) {
+			//先验证原密码是否正确
+			String sql1 = "select * from tbl_user where uid = ? and upass = ?";
+			//
+			String sql = "UPDATE `bbs`.`tbl_user` SET `upass` = ? WHERE `uid` = ?; ";
+			
+			if( db.executeQuery(sql1, uid,upass) != null ) {
+				return db.executeUpdate(sql, newpass,uid);
+			}else {
+				return -2;
+			}
+		}
+	
 	//查询用户表登录
 	public List<User> userLogin(User user) {
 		String sql="select uid,uname,upass,head,gender,date_format(regtime,'%Y-%m-%d %H:%i:%s') as regtime from tbl_user where uname=? and upass=?";
@@ -67,4 +81,12 @@ public class bbsUserBizImpl {
 		String sql="select a.*,b.uname from tbl_userinfo a ,tbl_user b where a.uid=b.uid";
 		return db.executeQuery(sql);
 	}
+	
+	public User getemail(String uname) {
+		String sql = "select email from tbl_user where uname = ?;";
+		List<Map<String, Object>> querry = db.executeQuery(sql, uname);
+		List<User> list = Myutil.ListMapToJavaBean(querry, User.class);
+		return list.get(0);
+	}
 }
+

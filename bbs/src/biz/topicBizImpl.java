@@ -7,6 +7,7 @@ import java.util.Map;
 
 import bean.PageBean;
 import bean.Topic;
+import bean.User;
 import bean.UserInfo;
 import dao.StopDao;
 import dao.UserDao;
@@ -171,18 +172,102 @@ public class topicBizImpl {
 	}
 	
 	/**
-	 * ��ѯ��̳�ظ�����ǰ10��topic
+	 * 论坛热帖
 	 */
 	public List<Topic> findAllHostTopic() {
 		StringBuffer sql=new StringBuffer();
 		
-		sql.append(" select * from ( select * from (select a.topicid,title,content,publishtime,modifytime,uid,uname,boardid, total as replycount ");
-		sql.append(" from		      (		     select topicid,title,content,date_format(publishtime,'%Y-%m-%d %H:%i:%s') as publishtime,date_format(modifytime,'%Y-%m-%d %H:%i:%s') as  modifytime,  tbl_user.uid,  uname,boardid ");
+		sql.append(" select * from ( select * from (select a.topicid,title,content,publishtime,modifytime,uid,uname,a.boardid,c.boardname, total as replycount ");
+		sql.append(" from ( select topicid,title,content,date_format(publishtime,'%Y-%m-%d %H:%i:%s') as publishtime,date_format(modifytime,'%Y-%m-%d %H:%i:%s') as  modifytime,  tbl_user.uid,  uname,boardid ");
 		sql.append(" from tbl_topic  inner join tbl_user on tbl_topic.uid=tbl_user.uid order by modifytime desc ) a ");
-		sql.append(" left join  (select topicid, count(*) as total from tbl_reply group by topicid) b on a.topicid=b.topicid   order by total desc )  d ) e limit 0,10");
+		sql.append(" left join  (select topicid, count(*) as total from tbl_reply group by topicid) b on a.topicid=b.topicid LEFT JOIN tbl_board c  ON a.boardid=c.boardid  order by total desc )  d ) e limit 0,10");
 
 		
 		List<Map<String,Object>> executeQuery = db.executeQuery(sql.toString());
+		
+		return Myutil.ListMapToJavaBean(executeQuery, Topic.class);
+				
+	}
+	
+	
+	/**
+	 * 风云人物
+	 * @return
+	 */
+	public List<User> personTop() {
+		String sql="select * from ( SELECT\n" + 
+				"  a.*,\n" + 
+				"  b.total\n" + 
+				"FROM\n" + 
+				"  tbl_user a\n" + 
+				"  LEFT JOIN (\n" + 
+				"      SELECT uid,\n" + 
+				"      COUNT(uid) AS total FROM tbl_topic GROUP BY uid\n" + 
+				"    ) b\n" + 
+				"    ON a.uid = b.uid ) c order by total desc limit 0,10\n";
+		
+		
+		List<Map<String,Object>> executeQuery = db.executeQuery(sql);
+		
+		return Myutil.ListMapToJavaBean(executeQuery, User.class);
+				
+	}
+	
+	/**
+	 * 风云人物的所有帖子
+	 * @return
+	 */
+	public List<Topic> personTopTopic(Topic topic) {
+		String sql="SELECT\n" + 
+				"    *\n" + 
+				"  FROM\n" + 
+				"    (SELECT\n" + 
+				"      a.topicid,\n" + 
+				"      title,\n" + 
+				"      content,\n" + 
+				"      publishtime,\n" + 
+				"      modifytime,\n" + 
+				"      uid,\n" + 
+				"      uname,\n" + 
+				"      a.boardid,\n" + 
+				"      c.boardname,\n" + 
+				"      total AS replycount\n" + 
+				"    FROM\n" + 
+				"      (SELECT\n" + 
+				"        topicid,\n" + 
+				"        title,\n" + 
+				"        content,\n" + 
+				"        DATE_FORMAT(\n" + 
+				"          publishtime,\n" + 
+				"          '%Y-%m-%d %H:%i:%s'\n" + 
+				"        ) AS publishtime,\n" + 
+				"        DATE_FORMAT(modifytime, '%Y-%m-%d %H:%i:%s') AS modifytime,\n" + 
+				"        tbl_user.uid,\n" + 
+				"        uname,\n" + 
+				"        boardid\n" + 
+				"      FROM\n" + 
+				"        tbl_topic\n" + 
+				"        INNER JOIN tbl_user\n" + 
+				"          ON tbl_topic.uid = tbl_user.uid\n" + 
+				"          WHERE tbl_user.uid=?\n" + 
+				"      ORDER BY modifytime DESC) a\n" + 
+				"      LEFT JOIN\n" + 
+				"        (SELECT\n" + 
+				"          topicid,\n" + 
+				"          COUNT(*) AS total\n" + 
+				"        FROM\n" + 
+				"          tbl_reply\n" + 
+				"        GROUP BY topicid) b\n" + 
+				"        ON a.topicid = b.topicid\n" + 
+				"        \n" + 
+				"    LEFT JOIN tbl_board c \n" + 
+				"    ON a.boardid=c.boardid    \n" + 
+				"    \n" + 
+				"    \n" + 
+				"    ORDER BY total DESC) d";
+		
+		
+		List<Map<String,Object>> executeQuery = db.executeQuery(sql,topic.getUid());
 		
 		return Myutil.ListMapToJavaBean(executeQuery, Topic.class);
 				

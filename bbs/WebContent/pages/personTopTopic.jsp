@@ -9,7 +9,7 @@
 <!--      导航        -->
 <br/>
 <DIV>
-	&gt;&gt;<B><a href="<%=request.getContextPath() %>/index.jsp">论坛首页</a></B>&gt;&gt;热帖榜单
+	&gt;&gt;<B><a href="<%=request.getContextPath() %>/index.jsp">论坛首页</a></B>
 </DIV>
 <br/>
 <!--      新帖        -->
@@ -24,7 +24,7 @@
 			</TR>
 <!--       表 头           -->
 			<TR class="tr2">
-				<TD style="WIDTH: 5%" align="center">热度排行</TD>
+				<TD >&nbsp;</TD>
 				<TD style="WIDTH: 40%" align="center">文章</TD>
 				<TD style="WIDTH: 10%" align="center">板块</TD>
 				<TD style="WIDTH: 15%" align="center">发布时间</TD>
@@ -33,10 +33,9 @@
 				<TD style="WIDTH: 10%" align="center">回复</TD>
 			</TR>
 <!--         主 题 列 表        -->
-			<%int count=0; %>
-			<c:forEach items="${pagebean}" var="tp">
+			<c:forEach items="${personTopTopic}" var="tp">
 				<TR class="tr3">
-				<TD style="text-align: center;"><IMG src="<%=request.getContextPath() %>/image/topic.gif" border=0><%=++count %></TD>
+				<TD style="text-align: center;"><IMG src="<%=request.getContextPath() %>/image/topic.gif" border=0></TD>
 				<TD style="FONT-SIZE: 15px" >
 					<A href="<%=request.getContextPath()%>/topic?flag=topicDetail&boardid=${tp.boardid }&topicid=${tp.topicid}&replyPages=1">${tp.title}</A>
 				</TD>

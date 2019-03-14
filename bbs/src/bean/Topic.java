@@ -10,6 +10,19 @@ public class Topic extends PageBean<Topic> implements Serializable {
 	private String publishtime;
 	private String modifytime;
 	private Integer boardid;
+	private String boardname;
+
+	
+	
+	
+
+	public String getBoardname() {
+		return boardname;
+	}
+
+	public void setBoardname(String boardname) {
+		this.boardname = boardname;
+	}
 
 	private Integer uid;
 
@@ -117,9 +130,12 @@ public class Topic extends PageBean<Topic> implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Topic [boardid=" + boardid + ", content=" + content + ", modifytime=" + modifytime + ", publishtime="
-				+ publishtime + ", replycount=" + replycount + ", title=" + title + ", topicid=" + topicid + ", uname="
-				+ uname + ", uid=" + uid + "]\n";
+		return "Topic [topicid=" + topicid + ", title=" + title + ", content=" + content + ", publishtime="
+				+ publishtime + ", modifytime=" + modifytime + ", boardid=" + boardid + ", boardname=" + boardname
+				+ ", uid=" + uid + ", uname=" + uname + ", head=" + head + ", regtime=" + regtime + ", replycount="
+				+ replycount + "]";
 	}
+
+	
 
 }

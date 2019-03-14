@@ -11,6 +11,26 @@ public class User implements Serializable {
 	private String head;
 	private String regtime;
 	private Integer gender;
+	private Integer total;
+	private String email;
+	
+
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Integer getTotal() {
+		return total;
+	}
+
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
 
 	public int getUid() {
 		return uid;
@@ -63,7 +83,7 @@ public class User implements Serializable {
 	}
 
 	public User(int uid, String uname, String upass, String head,
-			String regtime, int gender) {
+			String regtime, int gender,String email) {
 		super();
 		this.uid = uid;
 		this.uname = uname;
@@ -71,6 +91,7 @@ public class User implements Serializable {
 		this.head = head;
 		this.regtime = regtime;
 		this.gender = gender;
+		this.email = email;
 	}
 
 	public User() {
@@ -79,9 +100,10 @@ public class User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "User [gender=" + gender + ", head=" + head + ", regtime="
-				+ regtime + ", uname=" + uname + ", upass=" + upass
-				+ ", uid=" + uid + "]";
+		return "User [uid=" + uid + ", uname=" + uname + ", upass=" + upass + ", head=" + head + ", regtime=" + regtime
+				+ ", gender=" + gender + ", total=" + total + ", email="+ email +"]";
 	}
+
+
 
 }
