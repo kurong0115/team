@@ -14,14 +14,16 @@ import javax.servlet.http.HttpSession;
 import com.alibaba.fastjson.JSON;
 
 import bean.User;
+import bean.UserInfo;
 import biz.bbsUserBizImpl;
+import dao.UserDao;
 import utils.Myutil;
 
 
 @WebServlet("/bbsUser")
 public class userServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+	private UserDao ud=new UserDao();
 	bbsUserBizImpl ubi=new bbsUserBizImpl();
     public userServlet() {
         super();
@@ -214,6 +216,8 @@ public class userServlet extends HttpServlet {
 			if(userLogin!=null && !"".equals(userLogin)) {
 				user=userLogin.get(0);
 				session.setAttribute("user", user);
+				UserInfo userinfo=ud.selectAll(user.getUid());
+				session.setAttribute("userinfo", userinfo);
 				ubi.addExpendInfo(user);
 				//判断是否有回调路径
 				if(request.getSession().getAttribute("callbackPath")!=null) {

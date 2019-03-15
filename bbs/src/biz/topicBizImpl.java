@@ -50,8 +50,8 @@ public class topicBizImpl {
 	 * ����
 	 * @throws BizException 
 	 */
-	public int post(Topic topic,String email) throws BizException {
-		UserInfo userinfo=ud.selectAll(topic.getUid());
+	public int post(Topic topic,String email,UserInfo userinfo) throws BizException {
+		userinfo=ud.selectAll(topic.getUid());
 		System.out.println(userinfo);
 		//被禁言的时候不能发帖
 		if(userinfo.getEndtime()!=null&&userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
@@ -72,6 +72,7 @@ public class topicBizImpl {
 			ud.addTime(topic.getUid());
 			userinfo.setTime(userinfo.getTime()+1);
 		}
+//		topic=Myutil.filter(topic);
 		
 		//每发三次脏话禁言一天
 		if(userinfo.getTime()%3==0) {

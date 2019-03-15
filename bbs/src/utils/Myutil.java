@@ -23,15 +23,20 @@ import javax.servlet.http.HttpSession;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import bean.Topic;
+import dao.StopDao;
+import dao.UserDao;
+
 public class Myutil {
+	private static StopDao sd=new StopDao();
+	private static UserDao ud=new UserDao();
 	/**
 	 * 借助fastJSON工具把List<Map>转为List<javabase>对象
 	 * 
 	 * @param mList
 	 * @param t
 	 * @return
-	 */
-
+	 */	
 	public static <T> List<T> ListMapToJavaBean(List<Map<String, Object>> mList, Class<T> t) {
 		List<T> tList = new ArrayList<T>();
 		for (Map<String, Object> map : mList) {
@@ -233,5 +238,28 @@ public class Myutil {
 			System.out.println("邮件系统异常");
 			m.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 判读传进来的数据是否存在敏感词
+	 * @param topic
+	 * @return
+	 */
+	public static Topic filter(Topic topic) {
+		String beforeTitle=topic.getTitle();
+		String beforeContent=topic.getContent();
+		String afterTitle=beforeTitle;
+		String afterContent=beforeContent;
+		List<Map<String,Object>> list=sd.query();
+		for(int i=0;i<list.size();i++) {
+			afterTitle=afterTitle.replace((String)list.get(i).get("sname"), "**");
+			afterContent=afterContent.replace((String)list.get(i).get("sname"), "**");
+		}
+		if(!beforeTitle.equals(afterTitle)||!beforeContent.equals(afterContent)) {
+			ud.addTime(topic.getUid());
+		}
+		topic.setTitle(afterTitle);
+		topic.setContent(afterContent);
+		return topic;
 	}
 }

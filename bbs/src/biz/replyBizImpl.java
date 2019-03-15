@@ -1,20 +1,59 @@
 package biz;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
 import bean.PageBean;
 import bean.Reply;
 import bean.Topic;
+import bean.UserInfo;
+import dao.StopDao;
+import dao.UserDao;
 import utils.JDBCHelp;
 import utils.Myutil;
 
 public class replyBizImpl {
-	JDBCHelp db=new JDBCHelp();
+	private JDBCHelp db=new JDBCHelp();
+	private UserDao ud=new UserDao();
+	private StopDao sd=new StopDao();
 	/**
 	 * 回复帖子
+	 * @throws BizException 
 	 */
-	public int answer(Topic topic) {
+	public int answer(Topic topic,UserInfo userinfo,String email) throws BizException {
+		userinfo=ud.selectAll(topic.getUid());
+		System.out.println(userinfo);
+		//被禁言的时候不能发帖
+		if(userinfo.getEndtime()!=null&&userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
+			System.out.println("您已被禁言");
+			throw new BizException("您已被禁言,禁言结束时间为"+userinfo.getEndtime());			
+		}
+		List<Map<String,Object>> list=sd.query();
+		//判断过滤前后的内容是否一致,如不,则增加用户的次数
+		String beforeTitle=topic.getTitle();
+		String beforeContent=topic.getContent();
+		String afterTitle=beforeTitle;
+		String afterContent=beforeContent;
+		for(int i=0;i<list.size();i++) {
+			afterTitle=afterTitle.replace((String)list.get(i).get("sname"), "**");
+			afterContent=afterContent.replace((String)list.get(i).get("sname"), "**");
+		}
+		if(!beforeTitle.equals(afterTitle)||!beforeContent.equals(afterContent)) {
+			ud.addTime(topic.getUid());
+			userinfo.setTime(userinfo.getTime()+1);
+		}
+//		topic=Myutil.filter(topic);
+		
+		//每发三次脏话禁言一天
+		if(userinfo.getTime()%3==0) {
+			ud.stopPost(userinfo.getUid());
+			Myutil.sendemail(email, new Timestamp(System.currentTimeMillis()+24*60*60*1000));
+		}
+		
+		//把内容设置成过滤之后的内容
+		topic.setTitle(afterTitle);
+		topic.setContent(afterContent);
 		String sql="insert into tbl_reply values(null,null,?,now(),now(),?,?)";
 		return db.executeUpdate(sql, topic.getContent(),topic.getUid(),topic.getTopicid());
 	}

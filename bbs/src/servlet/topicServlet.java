@@ -19,6 +19,7 @@ import bean.PageBean;
 import bean.Reply;
 import bean.Topic;
 import bean.User;
+import bean.UserInfo;
 import biz.BizException;
 import biz.boardBizImpl;
 import biz.replyBizImpl;
@@ -317,7 +318,7 @@ public class topicServlet extends HttpServlet {
 		int uid = Integer.parseInt(request.getParameter("uid")) ;
 		int topicid = Integer.parseInt(request.getParameter("topicid")) ;
 		
-		
+		UserInfo userinfo=(UserInfo) request.getSession().getAttribute("userinfo");	
 		Integer pages =0;
 		if(request.getParameter("pages")==null || "".equals(request.getParameter("pages"))) {
 			pages=1;
@@ -330,8 +331,16 @@ public class topicServlet extends HttpServlet {
 		topic.setUid(uid);
 		topic.setTopicid(topicid);
 		topic.setContent(content);
-		
-		int answer = rbi.answer(topic);
+		User user=(User) request.getSession().getAttribute("user");
+		Integer answer=null;
+		try {
+			answer = rbi.answer(topic,userinfo,user.getEmail());
+		} catch (BizException e) {
+			request.setAttribute("replyMsg", e.getMessage());
+			System.out.println(e.getMessage());
+			request.getRequestDispatcher("/pages/answer.jsp?pages="+pages+"&topicid="+topic.getTopicid()).forward(request, response);
+			return;
+		}
 		
 		if(answer>0) {
 			response.sendRedirect("topic?flag=topicDetail&topicid="+topic.getTopicid()+"&pages="+pages);
@@ -406,10 +415,10 @@ public class topicServlet extends HttpServlet {
 
 			topic.setUid(user.getUid() );
 		}
-						
+		UserInfo userinfo=(UserInfo) request.getSession().getAttribute("userinfo");				
 		Integer post = null;
 		try {
-			post = tbi.post(topic,user.getEmail());
+			post = tbi.post(topic,user.getEmail(),userinfo);
 		} catch (BizException e) {
 			request.setAttribute("postMsg", e.getMessage());
 			System.out.println(e.getMessage());
