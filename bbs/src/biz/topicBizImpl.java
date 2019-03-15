@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
+
 import bean.PageBean;
 import bean.Topic;
 import bean.User;
@@ -45,7 +47,7 @@ public class topicBizImpl {
 	 * ����
 	 * @throws BizException 
 	 */
-	public int post(Topic topic) throws BizException {
+	public int post(Topic topic,String email) throws BizException {
 		UserInfo userinfo=ud.selectAll(topic.getUid());
 		System.out.println(userinfo);
 		//被禁言的时候不能发帖
@@ -71,6 +73,7 @@ public class topicBizImpl {
 		//每发三次脏话禁言一天
 		if(userinfo.getTime()%3==0) {
 			ud.stopPost(userinfo.getUid());
+			Myutil.sendemail(email, new Timestamp(System.currentTimeMillis()+24*60*60*1000));
 		}
 		
 		//把内容设置成过滤之后的内容
