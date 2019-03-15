@@ -47,4 +47,24 @@ public class boardBizImpl {
 		}
 		return map;
 	}
+	
+	/**
+	 * updatr bigBoard 
+	 */
+	public int updateBigBoard(Board board) {
+		String sql="update tbl_board set boardname=? where boardid=?";
+		
+		return db.executeUpdate(sql,board.getBoardname(),board.getBoardid());
+		
+	}
+	
+	/**
+	 * add bigBoard 
+	 */
+	public int addBigBoard(Board board) {
+		String sql="insert into tbl_board values(null,?,0)";
+		
+		return db.executeUpdate(sql,board.getBoardname());
+		
+	}
 }

@@ -7,6 +7,9 @@ import java.util.Map;
 
 
 
+
+
+import bean.Board;
 import bean.PageBean;
 import bean.Topic;
 import bean.User;
@@ -275,4 +278,31 @@ public class topicBizImpl {
 		return Myutil.ListMapToJavaBean(executeQuery, Topic.class);
 				
 	}
+	
+	/**
+	 * admin bigBoard Lsit
+	 */
+	public List<Board> bigBoardList() {
+		String sql="SELECT\n" + 
+				"  a.boardid,\n" + 
+				"  boardname,\n" + 
+				"  b.sonTotal\n" + 
+				"FROM\n" + 
+				"  tbl_board a\n" + 
+				"  LEFT JOIN\n" + 
+				"    (SELECT\n" + 
+				"      parentid,\n" + 
+				"      COUNT(boardname) AS sonTotal\n" + 
+				"    FROM\n" + 
+				"      tbl_board\n" + 
+				"    GROUP BY parentid\n" + 
+				"    HAVING parentid > 0) b\n" + 
+				"    ON a.boardid = b.parentid\n" + 
+				"WHERE a.parentid = 0";
+		
+		List<Map<String,Object>> executeQuery = db.executeQuery(sql);
+		return (List<Board>) Myutil.ListMapToJavaBean(executeQuery, Board.class);
+	}
+	
+	
 }
