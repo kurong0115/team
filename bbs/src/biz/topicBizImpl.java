@@ -51,7 +51,8 @@ public class topicBizImpl {
 		System.out.println(userinfo);
 		//被禁言的时候不能发帖
 		if(userinfo.getEndtime()!=null&&userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
-			throw new BizException("您已被禁言");
+			System.out.println("您已被禁言");
+			throw new BizException("您已被禁言,禁言结束时间为"+userinfo.getEndtime());			
 		}
 		List<Map<String,Object>> list=sd.query();
 		//判断过滤前后的内容是否一致,如不,则增加用户的次数

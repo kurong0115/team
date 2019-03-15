@@ -5,12 +5,20 @@ import java.util.List;
 import java.util.Map;
 
 import bean.TblAdmin;
+import dao.StopDao;
+import dao.UserDao;
 import utils.JDBCHelp;
 import utils.Myutil;
 
 public class adminBizImpl {
-
-	JDBCHelp db=new JDBCHelp();
+	private UserDao ud=new UserDao();
+	private JDBCHelp db=new JDBCHelp();
+	private StopDao sd=new StopDao();
+	/**
+	 * 管理员登录
+	 * @param admin
+	 * @return
+	 */
 	public TblAdmin login(TblAdmin admin) {
 		String sql="select * from tbl_admin where raname=? and rapwd=?";
 		List<Object> params=new ArrayList<>();
@@ -26,5 +34,26 @@ public class adminBizImpl {
 			return null;			
 		}
 	}
-
+	
+	/**
+	 * 根据用户的uid来解除禁言
+	 * @param uid
+	 * @return
+	 */
+	public Integer releaseById(Integer uid) {
+		return ud.releasePost(uid);
+	}
+	
+	/**
+	 * 查询所有的敏感词
+	 * @return
+	 */
+	public List<Map<String, Object>> findAllWords() {		
+		return sd.query();
+	}
+	
+	
+	public int delWordById(String sid) {
+		return sd.delWordById(sid);
+	}
 }

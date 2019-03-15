@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 
 import bean.User;
 import biz.bbsUserBizImpl;
+import utils.Myutil;
 
 
 @WebServlet("/bbsUser")
@@ -55,10 +56,31 @@ public class userServlet extends HttpServlet {
 		case "pwdchange":
 			pwdchange(request,response);
 			break;
+		case "sendcode":
+			sendcode(request,response);
+			break;
 		default:
 			break;
 		}
 	}
+	private void sendcode(HttpServletRequest request, HttpServletResponse response) {
+		//使用工具类发送验证码
+		String uname = request.getParameter("uname");
+		System.out.println("用户名为：" + uname);
+		User user = ubi.getemail(uname);
+		System.out.println("邮箱地址："+user.getEmail());
+		//发送邮件，返回验证码，并带回到前端界面
+		String code = Myutil.sendemail(user.getEmail());
+		request.getSession().setAttribute("code", code);
+		try {
+			response.getWriter().write(code);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
 	//修改密码
 	private void pwdchange(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//获取参数
