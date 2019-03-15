@@ -72,7 +72,7 @@
 			</h3></td> 
 	</tr>
 </table>
-<<<<<<< HEAD
+
 
 
 	<div id="usermessage" style="width: 88.5%; border: 2px solid #E0F0F9;margin-left: 5.6%;height: 200px" align="center">
@@ -99,7 +99,6 @@
 				<td height="20" colspan="4"><p class="style3">注册时间：${user.regtime }</p></td>
 			</tr>
 		</table>
-=======
 </div>
 <div id="pwdchange" text-align="center";>
 	<div class="container">
@@ -118,7 +117,7 @@
 			<font style="color: red;" id="samePwd"></font>
 		<br/>
 		</div>
->>>>>>> branch 'master' of https://github.com/kurong0115/team.git
+
 	</div>
 	<div id="pwdchange" style="width: 88.5%; border: 2px solid #E0F0F9;margin-left: 5.6%; height: 200px" align="center">
 		<div class="container">

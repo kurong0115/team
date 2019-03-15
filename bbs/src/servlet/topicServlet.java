@@ -93,13 +93,33 @@ public class topicServlet extends HttpServlet {
 		case "addBigBoard":
 			addBigBoard(request, response);
 			break;
+		case "delBigBoard":
+			delBigBoard(request, response);
+			break;
 		default:
 			break;
 		}
 	}
 	
+	
+	//del bigBoard
+	private void delBigBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		Integer boardid = Integer.parseInt(request.getParameter("boardid"));
+		
+		Board board=new Board();
+		board.setBoardid(boardid);
+		int delBigBaord= tbi.delBigBoard(board);
+		
+		if(delBigBaord>0) {
+			response.getWriter().write(1);
+			
+		}else {
+			response.getWriter().write(0);
+		}
+	}
+
 	//add bigBoard
-	@SuppressWarnings("unchecked")
+
 	private void addBigBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String boardname = request.getParameter("boardname");
 
@@ -107,23 +127,19 @@ public class topicServlet extends HttpServlet {
 		board.setBoardname(boardname);
 		
 		int addBigBoard = bbi.addBigBoard(board);
-		
-		@SuppressWarnings("rawtypes")
-		Map map=new HashMap<>();
+
 		
 		if(addBigBoard>0) {
-			map.put("code", 1);
+			response.getWriter().write(1);
 			
 		}else {
-			map.put("code", 0);
+			response.getWriter().write(0);
 		}
-		String jsonString = JSON.toJSONString(map);
-		System.out.println(jsonString);
-		response.getWriter().write(jsonString);
+		
 	}
 
 	//update bigBoard
-	@SuppressWarnings("unchecked")
+
 	private void updateBigBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String boardname = request.getParameter("boardname");
 		
@@ -135,17 +151,16 @@ public class topicServlet extends HttpServlet {
 		
 		int updateBigBoard = bbi.updateBigBoard(board);
 		
-		@SuppressWarnings("rawtypes")
-		Map map=new HashMap<>();
+		
 		
 		if(updateBigBoard>0) {
-			map.put("code", 1);
+			response.getWriter().write(1);
 			
 		}else {
-			map.put("code", 0);
+			response.getWriter().write(0);
 		}
-		String jsonString = JSON.toJSONString(map);
-		response.getWriter().write(jsonString);
+		
+		
 	}
 
 	//后台主板块管理

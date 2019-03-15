@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import biz.WordbBizImpl;
 
 
-@WebServlet("/word")
+@WebServlet("/noword")
 public class WordServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private WordbBizImpl wb=new WordbBizImpl();
@@ -33,12 +33,12 @@ public class WordServlet extends HttpServlet {
 	}
 
 	private void add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String word=request.getParameter("word");
+		String word=request.getParameter("noword");
 		int num=wb.add(word);
 		if(num>0) {
-			response.getWriter().write("添加成功");
+			response.getWriter().write(1);
 		}else{
-			response.getWriter().write("添加失败");
+			response.getWriter().write(0);
 		}
 	}
 	

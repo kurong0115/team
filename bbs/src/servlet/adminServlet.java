@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,16 +78,20 @@ public class adminServlet extends HttpServlet {
 	 * 查询所有的敏感词
 	 * @param request
 	 * @param response
+	 * @throws IOException 
 	 */
-	private void findAllWords(HttpServletRequest request, HttpServletResponse response) {
+	@SuppressWarnings("unchecked")
+	private void findAllWords(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		List<Map<String,Object>> list=abi.findAllWords();
+		
+		@SuppressWarnings("rawtypes")
+		Map map=new HashMap<>();
+		map.put("rows", list);
+		
 		String jsonString=JSON.toJSONString(list);
 		System.out.println(jsonString);
-		try {
-			response.getWriter().write(jsonString);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		response.getWriter().write(jsonString);
+		
 	}
 
 	//管理员登录

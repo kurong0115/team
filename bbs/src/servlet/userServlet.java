@@ -213,7 +213,7 @@ public class userServlet extends HttpServlet {
 			user.setUpass(upass);
 			List<User> userLogin = ubi.userLogin(user);
 			
-			if(userLogin!=null && !"".equals(userLogin)) {
+			if(userLogin.size()>0) {
 				user=userLogin.get(0);
 				session.setAttribute("user", user);
 				UserInfo userinfo=ud.selectAll(user.getUid());
