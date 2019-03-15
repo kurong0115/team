@@ -31,7 +31,7 @@
 				<TR class="tr3">
 				<TD style="text-align: center;"><%=++count %></TD>
 				<TD style="FONT-SIZE: 15px" align="center">
-					<A href="<%=request.getContextPath()%>/topic?flag=topicDetail" >${tp.uname}</A>
+					<font>${tp.uname}</font>
 				</TD>
 				
 				<TD style="FONT-SIZE: 12px" align="center">

@@ -17,6 +17,7 @@
 			url:"<%=request.getContextPath()%>/topic?flag=addBigBoard",      
 		    success:function(data){   	    			        
 				$("#dlg").dialog('close');
+				$.messager.alert('提示','成功','info');	
 				$("#bigBoardList").datagrid('reload');				
 		    }   
 		}); 
@@ -26,9 +27,6 @@
 		$('#bigBoardList').datagrid({
 			title:'主板块列表',
 			pagination:true,
-			pageSize:100,
-			pageList:[10,50,100,150,200],
-			idField:"boardid",
 			loadMsg:"正在加载数据。。。。",
 			rownumbers:false,
 			fit:true,
@@ -109,12 +107,20 @@
 				{
 					field:'sonTotal',
 					title:'子版块数量',
-					width:'40%',
+					width:'20%',
 					sortable:"true",
 					align:'center'
 					
 				},
-				
+				{
+					field:'caozuo',
+					title:'操作',
+					width:'20%',
+					formatter:delWord,
+					halign:'center',
+					align:'center'
+					
+				}
 				]],
 				//当结束编辑时会触发onafterEdit事件
 				onAfterEdit:function(rowIndex, rowData, changes){
@@ -142,6 +148,32 @@
 				}
 		});
 	});
+	
+	function delWord(value,row,index){		
+		var path="<%=request.getContextPath()%>";
+		var url=path+"/topic?flag=delBigBoard&boardid="+row.boardid;
+		return '<a href="javascript:void(0)" onclick=delById("'+url+'")>删除板块</a>';
+	}
+	
+	function delById(url){
+		$(function(){
+			$.ajax({
+				async:true,
+				url:url,
+				dataType:"text",
+				method:"post",
+				success:function(data){
+					if(data=1){
+						$.messager.alert('提示','成功','info');	
+						$("#bigBoardList").datagrid('reload');	
+					}else{
+						$.messager.alert('提示','失败','info');	
+						$("#bigBoardList").datagrid('reload');	
+					}
+				}
+			})
+		})
+	}
 </script>
 <body class="easyui-layout">
 	<div data-options="region:'center'" style="height:70%;">

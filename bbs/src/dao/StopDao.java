@@ -13,7 +13,7 @@ public class StopDao {
 	 * @return
 	 */
 	public List<Map<String,Object>> query(){
-		String sql="select * from tbl_stop";
+		String sql="select * from tbl_stop order by sid";
 		return db.executeQuery(sql);
 	}
 	

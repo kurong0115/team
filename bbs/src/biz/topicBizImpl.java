@@ -299,5 +299,16 @@ public class topicBizImpl {
 		return (List<Board>) Myutil.ListMapToJavaBean(executeQuery, Board.class);
 	}
 	
+	/**
+	 * del bigBoard
+	 * @param board
+	 * @return
+	 */
+	public int delBigBoard(Board board) {
+		String sql="delete from tbl_board where boardid=?";
+		return db.executeUpdate(sql, board.getBoardid());
+		
+	}
+	
 	
 }

@@ -32,6 +32,8 @@
 								
 								<%--  循环找到对应key值的的List<Board>> --%>
 								<c:forEach items="${allBoards2.value}" var="sonBoard">
+								
+									<c:if test="${ sonBoard!=null }">
 									<!--       子版块       -->
 									<TR class="tr3">
 										<TD width="5%">&nbsp;</TD>
@@ -58,7 +60,12 @@
 										
 										</TH>
 									</TR>
+									</c:if>
+
+									
 								</c:forEach>
+						
+								
 							</c:if>
 
 						</c:forEach>
