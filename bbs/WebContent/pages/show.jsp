@@ -64,8 +64,7 @@
 
 									
 								</c:forEach>
-						
-								
+	
 							</c:if>
 
 						</c:forEach>
