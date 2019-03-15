@@ -414,17 +414,17 @@ public class topicServlet extends HttpServlet {
 		
 		topic.setUid(uid);
 		topic.setBoardid(boardid);
-
+		User user=null;
 		HttpSession session = request.getSession();
 		if(session.getAttribute("user")!=null) {
-			User user = (User) session.getAttribute("user");
+			user = (User) session.getAttribute("user");
 
 			topic.setUid(user.getUid() );
 		}
 						
 		Integer post = null;
 		try {
-			post = tbi.post(topic);
+			post = tbi.post(topic,user.getEmail());
 		} catch (BizException e) {
 			request.setAttribute("postMsg", e.getMessage());
 			System.out.println(e.getMessage());
