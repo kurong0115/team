@@ -329,7 +329,7 @@ public class topicServlet extends HttpServlet {
 		
 		int delTopic = tbi.delTopic(topic);
 		if(delTopic>0) {
-			topicList(request,response);
+			personTopTopic(request,response);
 		}
 	}
 

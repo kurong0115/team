@@ -3,6 +3,46 @@
 <%@ include file="header.jsp"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+
+<script type="text/javascript">
+
+	$(function(){
+		 $.ajax({
+			url:"<%=request.getContextPath() %>/reply?flag=glktimes&topicid=${param.topicid }",
+			type:"POST",
+			dataType:"JSON",
+		 	success:function(data ){
+		 		if(data.code==1){
+		 			$("#glktimes").html("点赞数:"+data.obj);
+		 			
+		 		}
+		 	}
+			
+		 });
+	});
+ 	
+	function glk(  topicid ){
+	  	//js   jsp
+		$.ajax({
+			url:"<%=request.getContextPath() %>/reply?flag=glk&topicid="+topicid,
+			type:"POST",
+		 	dataType:"JSON",
+		 	success:function(data ){
+		 		if(data.code==1){
+		 			$("#glktimes").html("点赞数:"+data.obj);
+		 			
+		 		}
+		 	}
+		});
+	}   
+
+	$(function() {	
+			$("#collectmsg").fadeIn(2000);
+			$("#collectmsg").fadeOut(3000);		
+	});
+</script>
+
+
 <!--      主体        -->
 <DIV><br/>
 	<!--      导航        -->
@@ -14,16 +54,40 @@
 	<!--      回复、新帖        -->
 	<DIV>
 		<A href="<%=request.getContextPath() %>/pages/answer.jsp?pages=${param.pages }&topicid=<%=request.getParameter("topicid")%>"><IMG src="<%=request.getContextPath() %>/image/reply.gif"  border="0" id=td_post></A> 
-		<A href="<%=request.getContextPath() %>/pages/post.jsp"><IMG src="<%=request.getContextPath() %>/image/post.gif"   border="0" id=td_post></A>
-		<A href="<%=request.getContextPath() %>/topic?flag=topicHostList&boardid=${board.boardid }">返回板块热帖</A>
+		<A href="<%=request.getContextPath() %>/pages/post.jsp"><IMG src="<%=request.getContextPath() %>/image/post.gif"   border="0" id=td_post></A>&nbsp;&nbsp;&nbsp;
+		<A href="<%=request.getContextPath() %>/topic?flag=topicHostList&boardid=${board.boardid }">返回板块热帖</A>&nbsp;&nbsp;&nbsp;&nbsp;
 	
+		
+		
+		<c:if test="${user!=null}">
+			<a href='javascript:glk( ${param.topicid }  )'>点赞</a> 
+		</c:if>
+		<div id="collectmsg" style="width: 200px;line-height: 30px;background-color: #fff;text-align: center;position: absolute;left: 45%;top:28%;border: 2px solid #E0F0F9; ">
+				${msg }
+		</div>
+		
 	</DIV>
 
 	<!--      本页主题的标题        -->
 	<DIV>
 		<TABLE cellSpacing="0" cellPadding="0" width="100%">
 			<TR>
-				<TH class="h">本页主题: ${topicdetail.title}</TH>
+				<TH class="h">本页主题: ${topicdetail.title}
+				
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<font id="glktimes">
+					点赞数:
+				</font>
+				
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				
+				<c:if test="${user.uid!=null}">
+					<a id="collect" href="<%=request.getContextPath()%>/collect?flag=addCollect&topicid=${topicdetail.topicid}&boardid=${board.boardid }" >加入收藏</a>
+				</c:if>
+				
+				
+				</TH>
+				
 			</TR>
 			<TR class="tr2">
 				<TD>&nbsp;</TD>
@@ -69,10 +133,11 @@
 					<DIV class="tipad gray">
 						发表：[${reply.publishtime}] &nbsp;
 						最后修改:[${reply.modifytime}]
-						
 						<c:if test="${user.uid==reply.uid}">
 							<a onclick="confirm('确定删除?')?location.href='reply?flag=del&replyid=${reply.replyid }&topicid=${reply.topicid}':''" href="javascript:void(0)" >删除</a>
 						</c:if>
+						
+						
 					</DIV>
 				</TH>
 			</TR>

@@ -8,10 +8,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.fastjson.JSON;
+
+import bean.JsonModel;
 import bean.PageBean;
 import bean.Reply;
 import bean.Topic;
+import bean.User;
 import biz.replyBizImpl;
+import biz.replyRedisImpl;
 
 
 @WebServlet("/reply")
@@ -21,6 +26,7 @@ public class replyServlet extends HttpServlet {
 	Reply reply=new Reply();
 	
 	replyBizImpl rbi=new replyBizImpl();
+	replyRedisImpl rri=new replyRedisImpl();
 	
     public replyServlet() {
         super();
@@ -46,12 +52,66 @@ public class replyServlet extends HttpServlet {
 		case "finalPage":
 			finalPage(request, response);
 			break;
+		case "glktimes":
+			glktimes(request, response);
+			break;
+		case "glk":
+			glk(request, response);
+			break;
 		default:
 			break;
 		}
 	}
 
-	
+
+	/**
+	 * topic点赞
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 */
+	private void glk(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		JsonModel jm = new JsonModel();
+		
+		Reply reply = new Reply();
+		Integer topicid = Integer.parseInt(request.getParameter("topicid")) ;
+		reply.setTopicid(topicid);
+		
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		reply.setUid(user.getUid());
+		long a = rri.glkreply(reply);
+		
+		jm.setCode(1);
+		jm.setObj(a);
+		
+		String jsonString = JSON.toJSONString(jm);
+		response.getWriter().append(jsonString);
+		
+	}
+
+	/**
+	 * topic点赞次数
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 */
+	private void glktimes(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		JsonModel jm = new JsonModel();
+		
+		Reply reply = new Reply();
+		Integer topicid = Integer.parseInt(request.getParameter("topicid")) ;
+		reply.setTopicid(topicid);
+		Long a = rri.gettimes(reply);
+		
+		jm.setCode(1);
+		jm.setObj(a + "");
+		
+		String jsonString = JSON.toJSONString(jm);
+		response.getWriter().append(jsonString);
+	}
+
+
 	//首页
 	public void firstPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Integer topicid = Integer.parseInt(request.getParameter("topicid")) ;
