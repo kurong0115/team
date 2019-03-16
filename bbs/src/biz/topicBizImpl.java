@@ -23,8 +23,8 @@ public class topicBizImpl {
 	
 	private UserDao ud=new UserDao();
 	private StopDao sd=new StopDao();
-	JDBCHelp db=new JDBCHelp();
-	
+	private JDBCHelp db=new JDBCHelp();
+	public static UserInfo userinfo;
 	/**
 	 * ��ѯ��ǰ��������topic
 	 */
@@ -73,9 +73,9 @@ public class topicBizImpl {
 			userinfo.setTime(userinfo.getTime()+1);
 		}
 //		topic=Myutil.filter(topic);
-		
+ 		
 		//每发三次脏话禁言一天
-		if(userinfo.getTime()%3==0) {
+		if(userinfo.getTime()==3) {
 			ud.stopPost(userinfo.getUid());
 			Myutil.sendemail(email, new Timestamp(System.currentTimeMillis()+24*60*60*1000));
 		}
@@ -83,7 +83,7 @@ public class topicBizImpl {
 		//把内容设置成过滤之后的内容
 		topic.setTitle(afterTitle);
 		topic.setContent(afterContent);
-		
+		this.userinfo=userinfo;
 		String sql="insert into tbl_topic values(null,?,?,now(),now(),?,?)";
 		return db.executeUpdate(sql, topic.getTitle()
 							, topic.getContent()

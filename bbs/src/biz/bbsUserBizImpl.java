@@ -41,13 +41,13 @@ public class bbsUserBizImpl {
 	
 	//×¢²áÓÃ»§
 	public int regUser(User user) {
-		String sql="insert into tbl_user values(null,?,?,?,sysdate(),?)";
+		String sql="insert into tbl_user values(null,?,?,?,sysdate(),?,?)";
 		List<Object> params =new ArrayList<>();
 		params.add(user.getUname());
 		params.add(user.getUpass());
 		params.add(user.getHead());
 		params.add(user.getGender());
-		
+		params.add(user.getEmail());
 		int executeUpdate = db.executeUpdate(sql, params);
 		if(executeUpdate>0) {
 			return 1;
@@ -79,6 +79,11 @@ public class bbsUserBizImpl {
 		List<Map<String, Object>> querry = db.executeQuery(sql, uname);
 		List<User> list = Myutil.ListMapToJavaBean(querry, User.class);
 		return list.get(0);
+	}
+	
+	public List<Map<String,Object>> getBasicInfo(String uname,String upass){
+		String sql="select uid from tbl_user where uname=? and upass=?";
+		return db.executeQuery(sql, uname,upass);
 	}
 }
 

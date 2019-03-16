@@ -177,16 +177,20 @@ public class userServlet extends HttpServlet {
 		String upass = request.getParameter("uPass");
 		Integer gender = Integer.parseInt(request.getParameter("gender")) ;
 		String head = request.getParameter("head");
-		
+		String email=request.getParameter("email");
 		
 		User user=new User();
 		user.setGender(gender);
 		user.setHead(head);
 		user.setUname(uname);
 		user.setUpass(upass);
-		
+		user.setEmail(email);
 		
 		int num = ubi.regUser(user);
+		List<Map<String,Object>> list=ubi.getBasicInfo(user.getUname(), user.getUpass());
+		Integer uid=(Integer) list.get(0).get("uid");
+		System.out.println(uid);
+		user.setUid(uid);
 		ubi.addExpendInfo(user);
 		if(num==1) {
 			request.setAttribute("msg", "×¢²á³É¹¦");

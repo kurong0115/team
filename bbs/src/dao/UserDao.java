@@ -49,7 +49,7 @@ public class UserDao {
 	 * @param user
 	 */
 	public int releasePost(Integer uid) {
-		String sql="update tbl_userinfo set starttime=null,endtime=null where uid=?";
+		String sql="update tbl_userinfo set time=0,starttime=null,endtime=null where uid=?";
 		return db.executeUpdate(sql, uid);
 	}
 	

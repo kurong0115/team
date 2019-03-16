@@ -43,6 +43,9 @@ public class topicServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/html; charset=UTF-8");
 		String flag = request.getParameter("flag");
 		switch (flag) {
 		case "topicList":
@@ -334,6 +337,7 @@ public class topicServlet extends HttpServlet {
 		int topicid = Integer.parseInt(request.getParameter("topicid")) ;
 		
 		UserInfo userinfo=(UserInfo) request.getSession().getAttribute("userinfo");	
+		System.out.println("登录时的userinfo"+userinfo);
 		Integer pages =0;
 		if(request.getParameter("pages")==null || "".equals(request.getParameter("pages"))) {
 			pages=1;
@@ -341,7 +345,7 @@ public class topicServlet extends HttpServlet {
 			pages = Integer.parseInt(request.getParameter("pages"));
 			
 		}
-	
+//		UserInfo userinfo=(UserInfo) request.getSession().getAttribute("userinfo");		
 		String content = request.getParameter("content");
 		topic.setUid(uid);
 		topic.setTopicid(topicid);
@@ -357,7 +361,14 @@ public class topicServlet extends HttpServlet {
 			return;
 		}
 		
-		if(answer>0) {
+		if(answer>0) {	
+			System.out.println(userinfo);
+			if(replyBizImpl.userinfo.getTime()>userinfo.getTime()) {
+				response.getWriter().write("<script language='javascript'>"
+						+ "alert('请注意用词!!!');"
+						+ "window.location='topic?flag=topicDetail&boardid="+topic.getBoardid()+"&pages="+pages+"'"
+						+ "</script>");
+			}
 			response.sendRedirect("topic?flag=topicDetail&topicid="+topic.getTopicid()+"&pages="+pages);
 		}else {
 			request.setAttribute("msg", "服务器繁忙");
@@ -441,7 +452,13 @@ public class topicServlet extends HttpServlet {
 			return;
 		}
 		
-		if(post>0) {
+		if(post>0) {			
+			if(topicBizImpl.userinfo.getTime()>userinfo.getTime()) {
+				response.getWriter().write("<script language='javascript'>"
+						+ "alert('请注意用词!!!');"
+						+ "window.location='topic?flag=topicList&boardid="+topic.getBoardid()+"'"
+						+ "</script>");
+			}
 			response.sendRedirect("topic?flag=topicList&boardid="+topic.getBoardid());
 		}else {
 			request.setAttribute("msg", "服务器繁忙");

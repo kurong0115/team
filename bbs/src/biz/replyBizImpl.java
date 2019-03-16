@@ -17,6 +17,7 @@ public class replyBizImpl {
 	private JDBCHelp db=new JDBCHelp();
 	private UserDao ud=new UserDao();
 	private StopDao sd=new StopDao();
+	public static UserInfo userinfo;
 	/**
 	 * 回复帖子
 	 * @throws BizException 
@@ -36,24 +37,25 @@ public class replyBizImpl {
 		String afterTitle=beforeTitle;
 		String afterContent=beforeContent;
 		for(int i=0;i<list.size();i++) {
-			afterTitle=afterTitle.replace((String)list.get(i).get("sname"), "**");
+//			afterTitle=afterTitle.replace((String)list.get(i).get("sname"), "**");
 			afterContent=afterContent.replace((String)list.get(i).get("sname"), "**");
 		}
-		if(!beforeTitle.equals(afterTitle)||!beforeContent.equals(afterContent)) {
+		if(!beforeContent.equals(afterContent)) {
 			ud.addTime(topic.getUid());
 			userinfo.setTime(userinfo.getTime()+1);
 		}
 //		topic=Myutil.filter(topic);
 		
 		//每发三次脏话禁言一天
-		if(userinfo.getTime()%3==0) {
+		if(userinfo.getTime()==3) {
 			ud.stopPost(userinfo.getUid());
 			Myutil.sendemail(email, new Timestamp(System.currentTimeMillis()+24*60*60*1000));
 		}
 		
 		//把内容设置成过滤之后的内容
-		topic.setTitle(afterTitle);
+//		topic.setTitle(afterTitle);
 		topic.setContent(afterContent);
+		this.userinfo=userinfo;
 		String sql="insert into tbl_reply values(null,null,?,now(),now(),?,?)";
 		return db.executeUpdate(sql, topic.getContent(),topic.getUid(),topic.getTopicid());
 	}
