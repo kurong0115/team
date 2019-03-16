@@ -84,16 +84,16 @@ public class bbsUserBizImpl {
 		List<User> list = Myutil.ListMapToJavaBean(querry, User.class);
 		return list.get(0);
 	}
-<<<<<<< HEAD
+
 	
 	public List<Map<String,Object>> getBasicInfo(String uname,String upass){
 		String sql="select uid from tbl_user where uname=? and upass=?";
 		return db.executeQuery(sql, uname,upass);
-=======
+	}
+	
 	public int resetpwd(String upass,String uname) {
 		String sql = "UPDATE tbl_user SET upass = ? WHERE uname = ?";
 		return db.executeUpdate(sql, upass,uname);
->>>>>>> refs/remotes/origin/master
 	}
 }
 
