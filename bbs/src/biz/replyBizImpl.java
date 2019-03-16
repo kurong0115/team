@@ -55,7 +55,7 @@ public class replyBizImpl {
 */
 		List<Map<String,Object>> list=sd.query();
 		//判断过滤前后的内容是否一致,如不,则增加用户的次数
-		String beforeTitle=topic.getTitle();
+//		String beforeTitle=topic.getTitle();
 		String beforeContent=topic.getContent();
 //		String afterTitle=beforeTitle;
 		String afterContent=beforeContent;

@@ -366,10 +366,12 @@ public class topicServlet extends HttpServlet {
 		if(answer>0) {	
 			System.out.println("回帖后的"+rbi.getUserinfo());
 			if(rbi.getUserinfo().getTime()>userinfo.getTime()) {
+				request.getSession().setAttribute("userinfo", rbi.getUserinfo());
 				response.getWriter().write("<script language='javascript'>"
 						+ "alert('请注意用词!!!');"
 						+ "window.location='topic?flag=topicDetail&topicid="+topic.getTopicid()+"&pages="+pages+"'"
 						+ "</script>");
+				
 			}else {
 				response.sendRedirect("topic?flag=topicDetail&topicid="+topic.getTopicid()+"&pages="+pages);				
 			}
@@ -459,6 +461,7 @@ public class topicServlet extends HttpServlet {
 		if(post>0) {	
 			System.out.println("发帖后的"+tbi.getUserinfo());
 			if(tbi.getUserinfo().getTime()>userinfo.getTime()) {
+				request.getSession().setAttribute("userinfo", rbi.getUserinfo());
 				response.getWriter().write("<script language='javascript'>"
 						+ "alert('请注意用词!!!');"
 						+ "window.location='topic?flag=topicList&boardid="+topic.getBoardid()+"'"
