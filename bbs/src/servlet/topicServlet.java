@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,12 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.alibaba.fastjson.JSON;
+
 import bean.Board;
 import bean.PageBean;
 import bean.Reply;
 import bean.Topic;
 import bean.User;
+import bean.UserInfo;
 import biz.BizException;
+import biz.boardBizImpl;
 import biz.replyBizImpl;
 import biz.topicBizImpl;
 import utils.Myutil;
@@ -32,6 +37,7 @@ public class topicServlet extends HttpServlet {
 	
 	replyBizImpl rbi=new replyBizImpl();
 	
+	boardBizImpl bbi=new boardBizImpl();
     public topicServlet() {
         super();
     }
@@ -78,11 +84,97 @@ public class topicServlet extends HttpServlet {
 		case "personTopTopic":
 			personTopTopic(request, response);
 			break;
+		case "showBigBoardList":
+			showBigBoardList(request, response);
+			break;
+		case "updateBigBoard":
+			updateBigBoard(request, response);
+			break;
+		case "addBigBoard":
+			addBigBoard(request, response);
+			break;
+		case "delBigBoard":
+			delBigBoard(request, response);
+			break;
 		default:
 			break;
 		}
 	}
 	
+	
+	//del bigBoard
+	private void delBigBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		Integer boardid = Integer.parseInt(request.getParameter("boardid"));
+		
+		Board board=new Board();
+		board.setBoardid(boardid);
+		int delBigBaord= tbi.delBigBoard(board);
+		
+		if(delBigBaord>0) {
+			response.getWriter().write(1);
+			
+		}else {
+			response.getWriter().write(0);
+		}
+	}
+
+	//add bigBoard
+
+	private void addBigBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String boardname = request.getParameter("boardname");
+
+		Board board=new Board();
+		board.setBoardname(boardname);
+		
+		int addBigBoard = bbi.addBigBoard(board);
+
+		
+		if(addBigBoard>0) {
+			response.getWriter().write(1);
+			
+		}else {
+			response.getWriter().write(0);
+		}
+		
+	}
+
+	//update bigBoard
+
+	private void updateBigBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String boardname = request.getParameter("boardname");
+		
+		Integer boardid = Integer.parseInt(request.getParameter("boardid"));
+		
+		Board board=new Board();
+		board.setBoardid(boardid);
+		board.setBoardname(boardname);
+		
+		int updateBigBoard = bbi.updateBigBoard(board);
+		
+		
+		
+		if(updateBigBoard>0) {
+			response.getWriter().write(1);
+			
+		}else {
+			response.getWriter().write(0);
+		}
+		
+		
+	}
+
+	//后台主板块管理
+	@SuppressWarnings("unchecked")
+	private void showBigBoardList(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		List<Board> bigBoardList = tbi.bigBoardList();
+
+		@SuppressWarnings("rawtypes")
+		Map map=new HashMap<>();
+		map.put("rows", bigBoardList);
+		String jsonString = JSON.toJSONString(map);
+		response.getWriter().write(jsonString);
+	}
+
 	//风云人物的所有帖子
 	private void personTopTopic(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Integer uid = Integer.parseInt(request.getParameter("uid"));
@@ -241,7 +333,7 @@ public class topicServlet extends HttpServlet {
 		int uid = Integer.parseInt(request.getParameter("uid")) ;
 		int topicid = Integer.parseInt(request.getParameter("topicid")) ;
 		
-		
+		UserInfo userinfo=(UserInfo) request.getSession().getAttribute("userinfo");	
 		Integer pages =0;
 		if(request.getParameter("pages")==null || "".equals(request.getParameter("pages"))) {
 			pages=1;
@@ -254,8 +346,16 @@ public class topicServlet extends HttpServlet {
 		topic.setUid(uid);
 		topic.setTopicid(topicid);
 		topic.setContent(content);
-		
-		int answer = rbi.answer(topic);
+		User user=(User) request.getSession().getAttribute("user");
+		Integer answer=null;
+		try {
+			answer = rbi.answer(topic,userinfo,user.getEmail());
+		} catch (BizException e) {
+			request.setAttribute("replyMsg", e.getMessage());
+			System.out.println(e.getMessage());
+			request.getRequestDispatcher("/pages/answer.jsp?pages="+pages+"&topicid="+topic.getTopicid()).forward(request, response);
+			return;
+		}
 		
 		if(answer>0) {
 			response.sendRedirect("topic?flag=topicDetail&topicid="+topic.getTopicid()+"&pages="+pages);
@@ -323,20 +423,21 @@ public class topicServlet extends HttpServlet {
 		
 		topic.setUid(uid);
 		topic.setBoardid(boardid);
-
+		User user=null;
 		HttpSession session = request.getSession();
 		if(session.getAttribute("user")!=null) {
-			User user = (User) session.getAttribute("user");
+			user = (User) session.getAttribute("user");
 
 			topic.setUid(user.getUid() );
 		}
-						
+		UserInfo userinfo=(UserInfo) request.getSession().getAttribute("userinfo");				
 		Integer post = null;
 		try {
-			post = tbi.post(topic);
+			post = tbi.post(topic,user.getEmail(),userinfo);
 		} catch (BizException e) {
-			response.getWriter().print("<script  language='javascript'>'您已被禁言'</script>");
-			response.sendRedirect("topic?flag=topicList&boardid="+topic.getBoardid());
+			request.setAttribute("postMsg", e.getMessage());
+			System.out.println(e.getMessage());
+			request.getRequestDispatcher("topic?flag=topicList&boardid="+topic.getBoardid()).forward(request, response);
 			return;
 		}
 		

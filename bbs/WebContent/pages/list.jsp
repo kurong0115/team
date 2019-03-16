@@ -3,7 +3,7 @@
 
 <%@ include file="header.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ include file="../adminPages/links.jsp"%>
 <!--      主体        -->
 <DIV>
 <!--      导航        -->
@@ -12,6 +12,9 @@
 	&gt;&gt;<B><a href="<%=request.getContextPath() %>/index.jsp">论坛首页</a></B>&gt;&gt;
 	<B><a href="topic?flag=topicList&boardid=${board.boardid }&pages=1">${board.boardname}</a></B>
 </DIV>
+<c:if test="${postMsg!=null }">
+	<script>$.messager.alert('提示',"${postMsg}");</script>
+</c:if>
 <br/>
 <!--      新帖        -->
 	<DIV>
