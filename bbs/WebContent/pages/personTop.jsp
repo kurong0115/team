@@ -38,7 +38,10 @@
 					<a href="<%=request.getContextPath()%>/topic?flag=personTopTopic&uid=${tp.uid}" >查看所有帖子</a>
 				</TD>
 				
-				<td align="center">${tp.total}</td>
+				<td align="center">
+				<c:if test="${tp.total==null}">0</c:if>
+				<c:if test="${tp.total!=null}">${tp.total}</c:if>
+				</td>
 			</TR>
 			</c:forEach>
 			

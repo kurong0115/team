@@ -59,6 +59,11 @@
 	display: inline;
 }
 </style>
+
+<DIV>
+	&gt;&gt;<B><a href="<%=request.getContextPath() %>/index.jsp">论坛首页</a></B>&gt;&gt;个人中心
+	
+</DIV>
 <table width="89%"  align="center" cellpadding="0"
 	cellspacing="0">
 	<tr>

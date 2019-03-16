@@ -45,7 +45,7 @@
 					<TD style="FONT-SIZE: 12px" align="center">
 						<a href="<%=request.getContextPath()%>/topic?flag=topicDetail&topicid=${tp.topicid}&replyPages=1" >详情</a>
 						
-						<a onclick="confirm('确定删除?')?location.href='topic?flag=del&topicid=${tp.topicid}&boardid=${param.boardid}':''" href="javascript:void(0)" >删除</a>
+						<a onclick="confirm('确定删除?')?location.href='topic?flag=del&topicid=${tp.topicid}&uid=${tp.uid }':''" href="javascript:void(0)" >删除</a>
 						
 					</TD>
 				</c:if>
