@@ -78,15 +78,12 @@ public class userServlet extends HttpServlet {
 	private void resetpwd(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//获取验证码
 		HttpSession session = request.getSession();
-		String code1 = (String)session.getAttribute("code");
-		System.out.println("您的验证码为：" + code1);
-		String code2 = request.getParameter("code");
-		System.out.println("您输入的验证码为：" + code2);
+		String code1 = (String)session.getAttribute("code");//随机生成的验证码
+		String code2 = request.getParameter("mycode");//用户输入的验证码
 		if( code1.equals(code2) ) {//两次输入的验证码相同，可以进行修改密码
 			String uname = request.getParameter("uname");
 			String upass = request.getParameter("upass");
 			int result = ubi.resetpwd(upass, uname);
-			
 			if( result > 0  ) {//密码重置成功
 				String msg = "密码重置成功";
 				request.setAttribute("msg", msg);
@@ -106,22 +103,16 @@ public class userServlet extends HttpServlet {
 	 * 获取验证码的方法
 	 * @param request
 	 * @param response
+	 * @throws IOException 
 	 */
-	private void sendcode(HttpServletRequest request, HttpServletResponse response) {
+	private void sendcode(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		//使用工具类发送验证码
-		String uname = request.getParameter("uname");
-		System.out.println("用户名为：" + uname);
-		User user = ubi.getemail(uname);
-		System.out.println("邮箱地址："+user.getEmail());
+		String email = request.getParameter("email");
+		System.out.println("邮箱地址："+ email);
 		//发送邮件，返回验证码，并带回到前端界面
-		String code = Myutil.sendemail(user.getEmail());
+		String code = Myutil.sendemail(email);
 		request.getSession().setAttribute("code", code);
-		try {
-			response.getWriter().write(code);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		response.getWriter().append(code);
 	}
 
 
@@ -140,8 +131,6 @@ public class userServlet extends HttpServlet {
 		String upass = request.getParameter("upass");
 		if(upass.equals(user.getUpass())){
 			String newpass = request.getParameter("newpass");
-			
-			
 			//获取结果
 			Integer result = ubi.pwdchange(uid,newpass);
 			//跳转页面
@@ -220,6 +209,8 @@ public class userServlet extends HttpServlet {
 		Integer gender = Integer.parseInt(request.getParameter("gender")) ;
 		String head = request.getParameter("head");
 		String email=request.getParameter("email");
+		String regcode = request.getParameter("regcode");
+		String code = (String)request.getSession().getAttribute("code");
 		
 		User user=new User();
 		user.setGender(gender);
@@ -227,19 +218,23 @@ public class userServlet extends HttpServlet {
 		user.setUname(uname);
 		user.setUpass(upass);
 		user.setEmail(email);
-		
-		int num = ubi.regUser(user);
-		List<Map<String,Object>> list=ubi.getBasicInfo(user.getUname(), user.getUpass());
-		Integer uid=(Integer) list.get(0).get("uid");
-		System.out.println(uid);
-		user.setUid(uid);
-		ubi.addExpendInfo(user);
-		if(num==1) {
-			request.setAttribute("msg", "注册成功");
-			request.getRequestDispatcher("/pages/reg.jsp").forward(request, response);
+		if( regcode.equals(code) ) {
+			int num = ubi.regUser(user);
+			List<Map<String,Object>> list=ubi.getBasicInfo(user.getUname(), user.getUpass());
+			Integer uid=(Integer) list.get(0).get("uid");
+			System.out.println(uid);
+			user.setUid(uid);
+			ubi.addExpendInfo(user);
+			if(num==1) {
+				request.setAttribute("msg", "注册成功");
+				request.getRequestDispatcher("/pages/reg.jsp").forward(request, response);
+			}else {
+				request.setAttribute("msg", "注册失败");
+				request.getRequestDispatcher("/pages/reg.jsp").forward(request, response);
+			}
 		}else {
-			request.setAttribute("msg", "注册失败");
-			request.getRequestDispatcher("/pages/reg.jsp").forward(request, response);
+				request.setAttribute("msg", "验证码错误");
+				request.getRequestDispatcher("/pages/reg.jsp").forward(request, response);
 		}
 	}
 

@@ -8,6 +8,28 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.9.1.js"></script>
 <script type="text/javascript">
 	var path="<%=request.getContextPath()%>"
+		/* 发送验证码 */
+		function sendcode(){
+			if( $("#email").val() != null ){				
+				$.ajax({
+					url:"/bbs/bbsUser?flag=sendcode",
+					method:"post",
+					dataType:"text",
+					data:{"email":$("#email").val()},
+					async:true,
+					success:function(data){
+						if(data!=null){
+							alert("发送成功");
+						}		
+					},
+					error:function(){
+						alert("服务器异常！！！");
+					} 
+				})
+				}else{
+					alert("请输入您的邮箱地址！！");
+				}
+		}
 	function checkUserInfo() {
 		if (document.regForm.uName.value == "") {
 			alert("用户名不能为空");
@@ -45,7 +67,6 @@
 			}
 		},"text");
 	}
-	
 </script>
 
 
@@ -71,6 +92,11 @@
 		<br/>重复密码 &nbsp;
 			<INPUT class="input" tabIndex="3" type="password" maxLength="20" size="20" name="uPass1" onblur="isSamePwd()">
 			<font style="color: red;" id="samePwd"></font>
+		<br/>邮箱 &nbsp;
+			<INPUT class="input" tabIndex="4" type="email" maxLength="20" size="20" name="email" id="email">
+			<a href="javascript:void(0)" onclick="sendcode()">获取验证码</a>
+		</br>验证码 &nbsp;
+			<INPUT class="input" tabIndex="5" type="text" maxLength="20" size="20" name="regcode">
 		<br/>性别 &nbsp;
 			女<input type="radio" name="gender" value="1">
 			男<input type="radio" name="gender" value="2" checked="checked" />

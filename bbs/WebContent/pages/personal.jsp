@@ -100,25 +100,7 @@
 			</tr>
 		</table>
 </div>
-<div id="pwdchange" text-align="center";>
-	<div class="container">
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			<FORM onSubmit="return checkUserInfo()" name="pwdForm" 
-					action="<%=request.getContextPath() %>/bbsUser" method="post">
-		<input type="hidden" name="flag" value="pwdchange">
-		<br/>原&nbsp;密&nbsp;码 &nbsp;
-			<INPUT class="input" tabIndex="1" tryp="text" maxLength="20" size="20" name="upass">
-			<font id="info" ></font>
-		<br/>新&nbsp;密&nbsp;码 &nbsp;
-			<INPUT class="input" tabIndex="2" type="password" maxLength="20" size="20" name="newpass">
-		<br/>重复密码 &nbsp;
-			<INPUT class="input" tabIndex="3" type="password" maxLength="20" size="20" name="newpass1" onblur="isSamePwd()">
-			<font style="color: red;" id="samePwd"></font>
-		<br/>
-		</div>
 
-	</div>
 	<div id="pwdchange" style="width: 88.5%; border: 2px solid #E0F0F9;margin-left: 5.6%; height: 200px" align="center">
 		<div class="container">
 			<div class="row clearfix">

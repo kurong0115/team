@@ -73,18 +73,6 @@ public class bbsUserBizImpl {
 		String sql="select a.*,b.uname from tbl_userinfo a ,tbl_user b where a.uid=b.uid";
 		return db.executeQuery(sql);
 	}
-	/**
-	 * 从数据库获得用户的邮箱
-	 * @param uname
-	 * @return
-	 */
-	public User getemail(String uname) {
-		String sql = "select email from tbl_user where uname = ?;";
-		List<Map<String, Object>> querry = db.executeQuery(sql, uname);
-		List<User> list = Myutil.ListMapToJavaBean(querry, User.class);
-		return list.get(0);
-	}
-
 	
 	public List<Map<String,Object>> getBasicInfo(String uname,String upass){
 		String sql="select uid from tbl_user where uname=? and upass=?";
