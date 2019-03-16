@@ -61,10 +61,52 @@ public class userServlet extends HttpServlet {
 		case "sendcode":
 			sendcode(request,response);
 			break;
+		case "resetpwd":
+			resetpwd(request,response);
+			break;
 		default:
 			break;
 		}
 	}
+	/**
+	 * 重置密码的方法
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 * @throws ServletException 
+	 */
+	private void resetpwd(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//获取验证码
+		HttpSession session = request.getSession();
+		String code1 = (String)session.getAttribute("code");
+		System.out.println("您的验证码为：" + code1);
+		String code2 = request.getParameter("code");
+		System.out.println("您输入的验证码为：" + code2);
+		if( code1.equals(code2) ) {//两次输入的验证码相同，可以进行修改密码
+			String uname = request.getParameter("uname");
+			String upass = request.getParameter("upass");
+			int result = ubi.resetpwd(upass, uname);
+			
+			if( result > 0  ) {//密码重置成功
+				String msg = "密码重置成功";
+				request.setAttribute("msg", msg);
+				request.getRequestDispatcher("pages/login.jsp").forward(request, response);
+			}else {
+				String msg = "服务器繁忙，密码重置失败。";
+				request.setAttribute("msg", msg);
+				request.getRequestDispatcher("pages/resetpwd.jsp").forward(request, response);
+			}
+		}
+		
+		
+		
+	}
+
+	/**
+	 * 获取验证码的方法
+	 * @param request
+	 * @param response
+	 */
 	private void sendcode(HttpServletRequest request, HttpServletResponse response) {
 		//使用工具类发送验证码
 		String uname = request.getParameter("uname");
