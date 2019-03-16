@@ -16,6 +16,7 @@ $(function(){
 				success:function(data){
 					if(data!=null){
 						alert("发送成功");
+						window.location("/resetpwd.jsp");//hear
 					}		
 				},
 				error:function(){
@@ -61,6 +62,7 @@ function checkUserInfo() {
 					<span>&nbsp;验&nbsp;证&nbsp;码：</span><input type="text" id="code">
 					<button id="sendcode">获取验证码</button></br>
 					<font style="color: red;" id="samePwd"></font>
+					<font style="color: red;">${msg}</font>
 					<INPUT class="btn" tabIndex="4" type="submit" value="修改">
 				</FORM>
 			</div>
