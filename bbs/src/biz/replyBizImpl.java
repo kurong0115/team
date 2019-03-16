@@ -17,24 +17,47 @@ public class replyBizImpl {
 	private JDBCHelp db=new JDBCHelp();
 	private UserDao ud=new UserDao();
 	private StopDao sd=new StopDao();
-	public static UserInfo userinfo;
+	private  UserInfo info;
+	
+	public UserInfo getUserinfo() {
+		return info;
+	}
+
+	public void setUserinfo(UserInfo info) {
+		this.info = info;
+	}
+
 	/**
 	 * 回复帖子
 	 * @throws BizException 
 	 */
-	public int answer(Topic topic,UserInfo userinfo,String email) throws BizException {
-		userinfo=ud.selectAll(topic.getUid());
+	public int answer(Topic topic,String email) throws BizException {
+		UserInfo userinfo=ud.selectAll(topic.getUid());
+		if(userinfo.getEndtime()!=null&&userinfo.getStarttime()!=null) {
+			if(userinfo.getEndtime().before(new Timestamp(System.currentTimeMillis()))) {
+				ud.releasePost(topic.getUid());
+				userinfo.setStarttime(null);
+				userinfo.setEndtime(null);
+				userinfo.setTime(0);
+			}
+			if(userinfo.getEndtime()!=null&&userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
+				System.out.println("您已被禁言");
+				throw new BizException("您已被禁言,禁言结束时间为"+userinfo.getEndtime());			
+			}
+		}
+		this.setUserinfo(userinfo);
 		System.out.println(userinfo);
 		//被禁言的时候不能发帖
-		if(userinfo.getEndtime()!=null&&userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
+/*		if(userinfo.getEndtime()!=null&&userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
 			System.out.println("您已被禁言");
 			throw new BizException("您已被禁言,禁言结束时间为"+userinfo.getEndtime());			
 		}
+*/
 		List<Map<String,Object>> list=sd.query();
 		//判断过滤前后的内容是否一致,如不,则增加用户的次数
 		String beforeTitle=topic.getTitle();
 		String beforeContent=topic.getContent();
-		String afterTitle=beforeTitle;
+//		String afterTitle=beforeTitle;
 		String afterContent=beforeContent;
 		for(int i=0;i<list.size();i++) {
 //			afterTitle=afterTitle.replace((String)list.get(i).get("sname"), "**");
@@ -42,12 +65,13 @@ public class replyBizImpl {
 		}
 		if(!beforeContent.equals(afterContent)) {
 			ud.addTime(topic.getUid());
-			userinfo.setTime(userinfo.getTime()+1);
+//			userinfo.setTime(userinfo.getTime()+1);
+			info.setTime(info.getTime()+1);
 		}
 //		topic=Myutil.filter(topic);
 		
 		//每发三次脏话禁言一天
-		if(userinfo.getTime()==3) {
+		if(info.getTime()==3) {
 			ud.stopPost(userinfo.getUid());
 			Myutil.sendemail(email, new Timestamp(System.currentTimeMillis()+24*60*60*1000));
 		}
@@ -55,7 +79,7 @@ public class replyBizImpl {
 		//把内容设置成过滤之后的内容
 //		topic.setTitle(afterTitle);
 		topic.setContent(afterContent);
-		this.userinfo=userinfo;
+//		this.userinfo=userinfo;
 		String sql="insert into tbl_reply values(null,null,?,now(),now(),?,?)";
 		return db.executeUpdate(sql, topic.getContent(),topic.getUid(),topic.getTopicid());
 	}

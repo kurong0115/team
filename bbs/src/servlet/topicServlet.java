@@ -41,6 +41,8 @@ public class topicServlet extends HttpServlet {
     public topicServlet() {
         super();
     }
+    
+    
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
@@ -353,7 +355,7 @@ public class topicServlet extends HttpServlet {
 		User user=(User) request.getSession().getAttribute("user");
 		Integer answer=null;
 		try {
-			answer = rbi.answer(topic,userinfo,user.getEmail());
+			answer = rbi.answer(topic,user.getEmail());
 		} catch (BizException e) {
 			request.setAttribute("replyMsg", e.getMessage());
 			System.out.println(e.getMessage());
@@ -362,14 +364,15 @@ public class topicServlet extends HttpServlet {
 		}
 		
 		if(answer>0) {	
-			System.out.println(userinfo);
-			if(replyBizImpl.userinfo.getTime()>userinfo.getTime()) {
+			System.out.println("回帖后的"+rbi.getUserinfo());
+			if(rbi.getUserinfo().getTime()>userinfo.getTime()) {
 				response.getWriter().write("<script language='javascript'>"
 						+ "alert('请注意用词!!!');"
-						+ "window.location='topic?flag=topicDetail&boardid="+topic.getBoardid()+"&pages="+pages+"'"
+						+ "window.location='topic?flag=topicDetail&topicid="+topic.getTopicid()+"&pages="+pages+"'"
 						+ "</script>");
+			}else {
+				response.sendRedirect("topic?flag=topicDetail&topicid="+topic.getTopicid()+"&pages="+pages);				
 			}
-			response.sendRedirect("topic?flag=topicDetail&topicid="+topic.getTopicid()+"&pages="+pages);
 		}else {
 			request.setAttribute("msg", "服务器繁忙");
 			request.getRequestDispatcher("pages/answer.jsp").forward(request, response);
@@ -441,10 +444,11 @@ public class topicServlet extends HttpServlet {
 
 			topic.setUid(user.getUid() );
 		}
-		UserInfo userinfo=(UserInfo) request.getSession().getAttribute("userinfo");				
+		UserInfo userinfo=(UserInfo) request.getSession().getAttribute("userinfo");		
+		System.out.println("登录时的"+userinfo);
 		Integer post = null;
 		try {
-			post = tbi.post(topic,user.getEmail(),userinfo);
+			post = tbi.post(topic,user.getEmail());
 		} catch (BizException e) {
 			request.setAttribute("postMsg", e.getMessage());
 			System.out.println(e.getMessage());
@@ -452,14 +456,16 @@ public class topicServlet extends HttpServlet {
 			return;
 		}
 		
-		if(post>0) {			
-			if(topicBizImpl.userinfo.getTime()>userinfo.getTime()) {
+		if(post>0) {	
+			System.out.println("发帖后的"+tbi.getUserinfo());
+			if(tbi.getUserinfo().getTime()>userinfo.getTime()) {
 				response.getWriter().write("<script language='javascript'>"
 						+ "alert('请注意用词!!!');"
 						+ "window.location='topic?flag=topicList&boardid="+topic.getBoardid()+"'"
 						+ "</script>");
-			}
-			response.sendRedirect("topic?flag=topicList&boardid="+topic.getBoardid());
+			}else {
+				response.sendRedirect("topic?flag=topicList&boardid="+topic.getBoardid());
+			}			
 		}else {
 			request.setAttribute("msg", "服务器繁忙");
 			request.getRequestDispatcher("pages/post.jsp").forward(request, response);

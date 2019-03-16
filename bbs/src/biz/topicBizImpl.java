@@ -24,7 +24,7 @@ public class topicBizImpl {
 	private UserDao ud=new UserDao();
 	private StopDao sd=new StopDao();
 	private JDBCHelp db=new JDBCHelp();
-	public static UserInfo userinfo;
+	private  UserInfo info;
 	/**
 	 * ��ѯ��ǰ��������topic
 	 */
@@ -50,14 +50,28 @@ public class topicBizImpl {
 	 * ����
 	 * @throws BizException 
 	 */
-	public int post(Topic topic,String email,UserInfo userinfo) throws BizException {
-		userinfo=ud.selectAll(topic.getUid());
-		System.out.println(userinfo);
+	public int post(Topic topic,String email) throws BizException {
+		UserInfo userinfo=ud.selectAll(topic.getUid());
+		if(userinfo.getEndtime()!=null&&userinfo.getStarttime()!=null) {
+			if(userinfo.getEndtime().before(new Timestamp(System.currentTimeMillis()))) {
+				ud.releasePost(topic.getUid());
+				userinfo.setStarttime(null);
+				userinfo.setEndtime(null);
+				userinfo.setTime(0);
+			}
+			if(userinfo.getEndtime()!=null&&userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
+				System.out.println("您已被禁言");
+				throw new BizException("您已被禁言,禁言结束时间为"+userinfo.getEndtime());			
+			}
+		}		
+		this.setUserinfo(userinfo);
+		System.out.println("执行post方法"+userinfo);
 		//被禁言的时候不能发帖
-		if(userinfo.getEndtime()!=null&&userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
+/*		if(userinfo.getEndtime()!=null&&userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
 			System.out.println("您已被禁言");
 			throw new BizException("您已被禁言,禁言结束时间为"+userinfo.getEndtime());			
 		}
+*/
 		List<Map<String,Object>> list=sd.query();
 		//判断过滤前后的内容是否一致,如不,则增加用户的次数
 		String beforeTitle=topic.getTitle();
@@ -70,12 +84,13 @@ public class topicBizImpl {
 		}
 		if(!beforeTitle.equals(afterTitle)||!beforeContent.equals(afterContent)) {
 			ud.addTime(topic.getUid());
-			userinfo.setTime(userinfo.getTime()+1);
+//			userinfo.setTime(userinfo.getTime()+1);
+			info.setTime(info.getTime()+1);
 		}
 //		topic=Myutil.filter(topic);
  		
 		//每发三次脏话禁言一天
-		if(userinfo.getTime()==3) {
+		if(info.getTime()==3) {
 			ud.stopPost(userinfo.getUid());
 			Myutil.sendemail(email, new Timestamp(System.currentTimeMillis()+24*60*60*1000));
 		}
@@ -83,7 +98,7 @@ public class topicBizImpl {
 		//把内容设置成过滤之后的内容
 		topic.setTitle(afterTitle);
 		topic.setContent(afterContent);
-		this.userinfo=userinfo;
+//		this.info=userinfo;
 		String sql="insert into tbl_topic values(null,?,?,now(),now(),?,?)";
 		return db.executeUpdate(sql, topic.getTitle()
 							, topic.getContent()
@@ -92,6 +107,12 @@ public class topicBizImpl {
 				);
 	}
 	
+	public UserInfo getUserinfo() {
+		return info;
+	}
+	public void setUserinfo(UserInfo info) {
+		this.info = info;
+	}
 	/**
 	 * ��ѯ�������ӵ�����
 	 */
