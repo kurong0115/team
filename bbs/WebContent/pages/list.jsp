@@ -15,6 +15,9 @@
 <c:if test="${postMsg!=null }">
 	<script>$.messager.alert('提示',"${postMsg}");</script>
 </c:if>
+<c:if test="${msg!=null }">
+	<script>$.messager.alert('提示',"${msg}");</script>
+</c:if>
 <br/>
 <!--      新帖        -->
 	<DIV>
@@ -57,7 +60,7 @@
 					<TD style="FONT-SIZE: 12px" align="center">
 						<a href="<%=request.getContextPath()%>/topic?flag=topicDetail&topicid=${tp.topicid}&pages=${pagebean.pages}&replyPages=1" >详情</a>
 						
-						<a onclick="confirm('确定删除?')?location.href='topic?flag=del&topicid=${tp.topicid}&boardid=${param.boardid}':''" href="javascript:void(0)" >删除</a>
+						<a onclick="confirm('确定删除?')?location.href='topic?flag=listDel&topicid=${tp.topicid}&boardid=${param.boardid}':''" href="javascript:void(0)" >删除</a>
 						
 					</TD>
 				</c:if>

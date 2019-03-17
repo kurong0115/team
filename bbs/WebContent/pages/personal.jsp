@@ -92,11 +92,11 @@
 			<tr>
 				<td height="20" colspan="3"><p class="style3">
 						性別：
-						<c:if test="${user.gender < 2 }">
-							<c:out value="男"></c:out>
+						<c:if test="${user.gender == 2 }">
+							男
 						</c:if>
-						<c:if test="${user.gender > 1 } ">
-							<c:out value="女"></c:out>
+						<c:if test="${user.gender == 1 } ">
+							女
 						</c:if>
 					</p></td>
 			</tr>

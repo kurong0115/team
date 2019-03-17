@@ -101,12 +101,74 @@ public class topicServlet extends HttpServlet {
 		case "delBigBoard":
 			delBigBoard(request, response);
 			break;
+		case "listDel":
+			listDel(request, response);
+			break;
+		case "hostDel":
+			hostDel(request, response);
+			break;
+		case "allHostDel":
+			allHostDel(request, response);
+			break;
 		default:
 			break;
 		}
 	}
 	
-	
+	//论坛热帖删除
+	private void allHostDel(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int topicid = Integer.parseInt(request.getParameter("topicid")) ;
+		topic.setTopicid(topicid);
+		
+		int delTopic = tbi.delTopic(topic);
+		if(delTopic>0) {
+			request.setAttribute("msg", "删除成功");
+			allTopicTopList(request, response);
+		}else {
+			request.setAttribute("msg", "服务器繁忙，删除失败");
+			request.getRequestDispatcher("/pages/allHostList.jsp").forward(request, response);
+		}
+		
+	}
+
+
+
+	//每个板块热帖的删除
+	private void hostDel(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int topicid = Integer.parseInt(request.getParameter("topicid")) ;
+		topic.setTopicid(topicid);
+		
+		int delTopic = tbi.delTopic(topic);
+		if(delTopic>0) {
+			request.setAttribute("msg", "删除成功");
+			topicHostList(request, response);
+		}else {
+			request.setAttribute("msg", "服务器繁忙，删除失败");
+			request.getRequestDispatcher("/pages/list.jsp").forward(request, response);
+		}
+		
+	}
+
+
+
+	//每个板块list的删除
+	private void listDel(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int topicid = Integer.parseInt(request.getParameter("topicid")) ;
+		topic.setTopicid(topicid);
+		
+		int delTopic = tbi.delTopic(topic);
+		if(delTopic>0) {
+			request.setAttribute("msg", "删除成功");
+			topicList(request,response);
+		}else {
+			request.setAttribute("msg", "服务器繁忙，删除失败");
+			request.getRequestDispatcher("/pages/list.jsp").forward(request, response);
+		}
+		
+	}
+
+
+
 	//del bigBoard
 	private void delBigBoard(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Integer boardid = Integer.parseInt(request.getParameter("boardid"));
@@ -329,7 +391,11 @@ public class topicServlet extends HttpServlet {
 		
 		int delTopic = tbi.delTopic(topic);
 		if(delTopic>0) {
+			request.setAttribute("msg", "删除成功");
 			personTopTopic(request,response);
+		}else {
+			request.setAttribute("msg", "服务器繁忙，删除失败");
+			request.getRequestDispatcher("/pages/personTopTopic.jsp").forward(request, response);
 		}
 	}
 
