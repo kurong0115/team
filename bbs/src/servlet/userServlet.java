@@ -259,6 +259,7 @@ public class userServlet extends HttpServlet {
 				session.setAttribute("user", user);
 				UserInfo userinfo=ud.selectAll(user.getUid());
 				session.setAttribute("userinfo", userinfo);
+				session.setMaxInactiveInterval(3600);
 				ubi.addExpendInfo(user);
 				//判断是否有回调路径
 				if(request.getSession().getAttribute("callbackPath")!=null) {

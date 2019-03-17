@@ -338,8 +338,8 @@ public class topicServlet extends HttpServlet {
 		int uid = Integer.parseInt(request.getParameter("uid")) ;
 		int topicid = Integer.parseInt(request.getParameter("topicid")) ;
 		
-		UserInfo userinfo=(UserInfo) request.getSession().getAttribute("userinfo");	
-		System.out.println("登录时的userinfo"+userinfo);
+//		UserInfo userinfo=(UserInfo) request.getSession().getAttribute("userinfo");	
+		
 		Integer pages =0;
 		if(request.getParameter("pages")==null || "".equals(request.getParameter("pages"))) {
 			pages=1;
@@ -347,7 +347,8 @@ public class topicServlet extends HttpServlet {
 			pages = Integer.parseInt(request.getParameter("pages"));
 			
 		}
-//		UserInfo userinfo=(UserInfo) request.getSession().getAttribute("userinfo");		
+		UserInfo userinfo=(UserInfo) request.getSession().getAttribute("userinfo");		
+		System.out.println("登录时的userinfo"+userinfo);
 		String content = request.getParameter("content");
 		topic.setUid(uid);
 		topic.setTopicid(topicid);
@@ -446,7 +447,7 @@ public class topicServlet extends HttpServlet {
 
 			topic.setUid(user.getUid() );
 		}
-		UserInfo userinfo=(UserInfo) request.getSession().getAttribute("userinfo");		
+		UserInfo userinfo=(UserInfo) session.getAttribute("userinfo");		
 		System.out.println("登录时的"+userinfo);
 		Integer post = null;
 		try {
@@ -461,7 +462,7 @@ public class topicServlet extends HttpServlet {
 		if(post>0) {	
 			System.out.println("发帖后的"+tbi.getUserinfo());
 			if(tbi.getUserinfo().getTime()>userinfo.getTime()) {
-				request.getSession().setAttribute("userinfo", rbi.getUserinfo());
+				request.getSession().setAttribute("userinfo", tbi.getUserinfo());
 				response.getWriter().write("<script language='javascript'>"
 						+ "alert('请注意用词!!!');"
 						+ "window.location='topic?flag=topicList&boardid="+topic.getBoardid()+"'"
