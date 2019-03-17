@@ -91,8 +91,12 @@ public class topicBizImpl {
  		
 		//每发三次脏话禁言一天
 		if(info.getTime()==3) {
-			ud.stopPost(userinfo.getUid());
-			Myutil.sendemail(email, new Timestamp(System.currentTimeMillis()+24*60*60*1000));
+			ud.stopPost(userinfo.getUid());			
+			new Thread() {
+				public void run() {
+					Myutil.sendemail(email, new Timestamp(System.currentTimeMillis()+24*60*60*1000));
+				}; {};
+			}.start();
 		}
 		
 		//把内容设置成过滤之后的内容

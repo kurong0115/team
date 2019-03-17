@@ -248,7 +248,7 @@ public class userServlet extends HttpServlet {
 		//先判断验证码
 		HttpSession session = request.getSession();
 		String valCode = (String) session.getAttribute("code");
-		if(code.equals(valCode)) {
+		if(code.equalsIgnoreCase(valCode)) {
 			User user=new User();
 			user.setUname(uname);
 			user.setUpass(upass);
@@ -259,7 +259,6 @@ public class userServlet extends HttpServlet {
 				session.setAttribute("user", user);
 				UserInfo userinfo=ud.selectAll(user.getUid());
 				session.setAttribute("userinfo", userinfo);
-				session.setMaxInactiveInterval(3600);
 				ubi.addExpendInfo(user);
 				//判断是否有回调路径
 				if(request.getSession().getAttribute("callbackPath")!=null) {
