@@ -60,7 +60,11 @@
 					<TD style="FONT-SIZE: 12px" align="center">
 						<a href="<%=request.getContextPath()%>/topic?flag=topicDetail&topicid=${tp.topicid}&pages=${pagebean.pages}&replyPages=1" >详情</a>
 						
+<<<<<<< HEAD
 						<a onclick="confirm('确定删除?')?location.href='topic?flag=listDel&topicid=${tp.topicid}&boardid=${param.boardid}':''" href="javascript:void(0)" >删除</a>
+=======
+						<a onclick="confirm('确定删除?')?location.href='topic?flag=del&topicid=${tp.topicid}&boardid=${param.boardid}&uid=${tp.uid }':''" href="javascript:void(0)" >删除</a>
+>>>>>>> branch 'master' of https://github.com/kurong0115/team.git
 						
 					</TD>
 				</c:if>

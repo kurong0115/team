@@ -33,6 +33,7 @@ public class replyBizImpl {
 	 */
 	public int answer(Topic topic,String email) throws BizException {
 		UserInfo userinfo=ud.selectAll(topic.getUid());
+		System.out.println("调用answer方法时的userinfo"+userinfo);
 		if(userinfo.getEndtime()!=null&&userinfo.getStarttime()!=null) {
 			if(userinfo.getEndtime().before(new Timestamp(System.currentTimeMillis()))) {
 				ud.releasePost(topic.getUid());
@@ -46,7 +47,7 @@ public class replyBizImpl {
 			}
 		}
 		this.setUserinfo(userinfo);
-		System.out.println(userinfo);
+		System.out.println("传递后的"+this.getUserinfo());
 		//被禁言的时候不能发帖
 /*		if(userinfo.getEndtime()!=null&&userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
 			System.out.println("您已被禁言");
