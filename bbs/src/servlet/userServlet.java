@@ -64,10 +64,45 @@ public class userServlet extends HttpServlet {
 		case "resetpwd":
 			resetpwd(request,response);
 			break;
+		case "personalChange":
+			personalChange(request,response);
+			break;
 		default:
 			break;
 		}
 	}
+	
+	/**
+	 * 修改用户信息
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 * @throws ServletException 
+	 */
+	private void personalChange(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//接收参数
+		User user = new User();
+		String uname = request.getParameter("uname");
+		String gender = request.getParameter("gender");
+		String email = request.getParameter("email");
+		String uid = String.valueOf(user.getUid());
+		Integer result = ubi.personalChange(uname, gender, email, uid);
+		if( result > 0  ) {//密码重置成功
+			//将新信息加入到user类中
+			user.setUname(uname);
+			user.setGender(Integer.parseInt(gender));
+			user.setEmail(email);
+			String msg = "修改成功";
+			request.setAttribute("msg", msg);
+			request.getRequestDispatcher("pages/personalChange.jsp").forward(request, response);
+		}else {
+			String msg = "服务器繁忙，修改失败。";
+			request.setAttribute("msg", msg);
+			request.getRequestDispatcher("pages/personalChange.jsp").forward(request, response);
+		}
+	}
+
+
 	/**
 	 * 重置密码的方法
 	 * @param request

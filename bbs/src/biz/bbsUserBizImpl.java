@@ -12,6 +12,13 @@ public class bbsUserBizImpl {
 
 	JDBCHelp db=new JDBCHelp();
 	
+	
+	//用户修改个人信息
+	public Integer personalChange(String uname,String gender,String email,String uid) {
+		//先查看哪一些没有改变
+		String sql = "UPDATE tbl_user SET uname = ? ,gender = ?,email = ? where uid = ?";
+		return db.executeUpdate(sql, uname,gender,email,uid);
+	}
 	//用户修改密码
 		public Integer pwdchange(Integer uid ,String upass) {
 			String sql = "UPDATE `bbs`.`tbl_user` SET `upass` = ? WHERE `uid` = ?; ";
