@@ -248,7 +248,7 @@ public class userServlet extends HttpServlet {
 		//œ»≈–∂œ—È÷§¬Î
 		HttpSession session = request.getSession();
 		String valCode = (String) session.getAttribute("code");
-		if(code.equals(valCode)) {
+		if(code.equalsIgnoreCase(valCode)) {
 			User user=new User();
 			user.setUname(uname);
 			user.setUpass(upass);

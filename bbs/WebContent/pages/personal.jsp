@@ -96,7 +96,8 @@
 						<c:if test="${user.gender==2 }">
 							男
 						</c:if>
-						<c:if test="${user.gender==1 }">
+						<c:if test="${user.gender == 1 }">
+
 							女
 						</c:if>
 					</p>
