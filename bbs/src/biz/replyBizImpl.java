@@ -74,7 +74,11 @@ public class replyBizImpl {
 		//每发三次脏话禁言一天
 		if(info.getTime()==3) {
 			ud.stopPost(userinfo.getUid());
-			Myutil.sendemail(email, new Timestamp(System.currentTimeMillis()+24*60*60*1000));
+			new Thread() {
+				public void run() {
+					Myutil.sendemail(email, new Timestamp(System.currentTimeMillis()+24*60*60*1000));
+				}; {};
+			}.start();
 		}
 		
 		//把内容设置成过滤之后的内容
@@ -94,6 +98,7 @@ public class replyBizImpl {
 				"    date_format(modifytime,'%Y-%m-%d %H:%i:%s') as modifytime, tbl_reply.uid, topicid,\r\n" + 
 				"    uname,\r\n" + 
 				"    head,\r\n" + 
+				"    agreecount,\r\n"+
 				"    date_format(regtime,'%Y-%m-%d %H:%i:%i') as  regtime\r\n" + 
 				"from tbl_reply\r\n" + 
 				"inner join tbl_user\r\n" + 

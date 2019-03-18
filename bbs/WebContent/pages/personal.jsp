@@ -89,15 +89,27 @@
 				<td height="20" colspan="2"><p class="style3">姓名：${user.uname }</p></td>
 			</tr>
 			<tr>
-				<td height="20" colspan="3"><p class="style3">
+				<td height="20" colspan="3">
+					<p class="style3">
 						性別：
+<<<<<<< HEAD
 						<c:if test="${user.gender ==2 }">
+=======
+						<c:if test="${user.gender==2 }">
+>>>>>>> branch 'master' of https://github.com/kurong0115/team.git
 							男
+<<<<<<< HEAD
 						</c:if>
 						<c:if test="${user.gender ==1 }">
+=======
+						</c:if>
+						<c:if test="${user.gender == 1 }">
+
+>>>>>>> branch 'master' of https://github.com/kurong0115/team.git
 							女
 						</c:if>
-					</p></td>
+					</p>
+				</td>
 			</tr>
 			<tr>
 				<td height="20" colspan="4"><p class="style3">邮箱：${user.email}</td>
