@@ -90,15 +90,17 @@
 				<td height="20" colspan="2"><p class="style3">姓名：${user.uname }</p></td>
 			</tr>
 			<tr>
-				<td height="20" colspan="3"><p class="style3">
+				<td height="20" colspan="3">
+					<p class="style3">
 						性別：
-						<c:if test="${user.gender == 2 }">
+						<c:if test="${user.gender==2 }">
 							男
 						</c:if>
-						<c:if test="${user.gender == 1 } ">
+						<c:if test="${user.gender==1 }">
 							女
 						</c:if>
-					</p></td>
+					</p>
+				</td>
 			</tr>
 			<tr>
 				<td height="20" colspan="4"><p class="style3">注册时间：${user.regtime }</p></td>

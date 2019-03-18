@@ -94,6 +94,7 @@ public class replyBizImpl {
 				"    date_format(modifytime,'%Y-%m-%d %H:%i:%s') as modifytime, tbl_reply.uid, topicid,\r\n" + 
 				"    uname,\r\n" + 
 				"    head,\r\n" + 
+				"    agreecount,\r\n"+
 				"    date_format(regtime,'%Y-%m-%d %H:%i:%i') as  regtime\r\n" + 
 				"from tbl_reply\r\n" + 
 				"inner join tbl_user\r\n" + 

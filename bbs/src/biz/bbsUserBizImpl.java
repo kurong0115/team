@@ -65,7 +65,7 @@ public class bbsUserBizImpl {
 	 * @return
 	 */
 	public List<Map<String, Object>> findUSer() {
-		String sql="select uid,uname,head,date_format(regtime,'%Y-%m-%d %H:%i:%s') as regtime,gender from tbl_user";
+		String sql="select uid,uname,head,date_format(regtime,'%Y-%m-%d %H:%i:%s') as regtime,gender,email from tbl_user";
 		return db.executeQuery(sql);
 	}
 

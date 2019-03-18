@@ -17,11 +17,12 @@
 		    fitColumns:true,
 		    singleSelect:true,
 		    columns:[[
-				{field:'uid',title:'编号',width:100,halign:'center',align:'center'},
-				{field:'uname',title:'用户名',width:200,halign:'center',align:'center'},
+				{field:'uid',title:'编号',width:50,halign:'center',align:'center'},
+				{field:'uname',title:'用户名',width:100,halign:'center',align:'center'},
 				{field:'head',title:'头像',width:200,formatter:getHeadDisplay,halign:'center',align:'center'},
 				{field:'regtime',title:'注册时间',width:200,halign:'center',align:'center'},
-				{field:'gender',title:'性别',width:100,formatter:getGenderDisplay,halign:'center',align:'center'}
+				{field:'gender',title:'性别',width:100,formatter:getGenderDisplay,halign:'center',align:'center'},
+				{field:'email',title:'邮箱',width:100,halign:'center',align:'center'}
 		    ]]
 		});
 	});
