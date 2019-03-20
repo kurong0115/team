@@ -43,6 +43,10 @@
 			alert("密码不一致");
 			return false;
 		}
+		if (document.getElementById("info").innerHTML == "用户名已存在") {
+			alert("用户名已存在");
+			return false;
+		}
 	}
 	
 	function isSamePwd() {

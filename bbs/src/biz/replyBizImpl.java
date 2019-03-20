@@ -104,6 +104,8 @@ public class replyBizImpl {
 				"    uname,\r\n" + 
 				"    head,\r\n" + 
 				"    date_format(regtime,'%Y-%m-%d %H:%i:%i') as  regtime,agreecount\r\n" + 
+				"    agreecount,\r\n"+
+				"    date_format(regtime,'%Y-%m-%d %H:%i:%i') as  regtime\r\n" + 
 				"from tbl_reply\r\n" + 
 				"inner join tbl_user\r\n" + 
 				"on tbl_reply.uid=tbl_user.uid\r\n" + 

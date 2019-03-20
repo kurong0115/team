@@ -99,10 +99,10 @@ function submitForm(){
 				method:"post",
 				success:function(data){
 					if(data=="ok"){
-						alert("删除成功");
+						$.messager.alert('提示','成功','info');	
 						$("#dg").datagrid('reload');	
 					}else{
-						alert("删除失败!!!");
+						$.messager.alert('提示','失败','info');	
 						$("#dg").datagrid('reload');	
 					}
 				},

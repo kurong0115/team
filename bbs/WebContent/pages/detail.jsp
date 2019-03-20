@@ -6,6 +6,20 @@
 
 <script type="text/javascript">
 
+	function name() {
+		$.ajax({
+		url:"<%=request.getContextPath() %>/reply?flag=replyAgree&replyid=${param.topicid }",
+		type:"POST",
+		dataType:"JSON",
+			success:function(data ){
+				if(data.code==1){
+					$("#glktimes").html("点赞数:"+data.obj);	 			
+				}
+			}
+		
+		});
+	}
+	
 	$(function(){
 		 $.ajax({
 			url:"<%=request.getContextPath() %>/reply?flag=glktimes&topicid=${param.topicid }",
@@ -13,7 +27,7 @@
 			dataType:"JSON",
 		 	success:function(data ){
 		 		if(data.code==1){
-		 			$("#glktimes").html("点赞数:"+data.obj);
+		 			$("#replygreed").html("点赞数:"+data.obj);
 		 			
 		 		}
 		 	}
@@ -76,6 +90,19 @@
 			$("#collectmsg").fadeIn(2000);
 			$("#collectmsg").fadeOut(3000);		
 	});
+	
+	
+	$(function() {
+		$("#agree").click(function() {
+			$("#disagree").show();
+			$("#agree").hide();
+		});
+		$("#disagree").click(function() {
+			$("#agree").show();
+			$("#disagree").hide();
+		});
+		
+	})
 </script>
 
 
@@ -96,7 +123,10 @@
 		
 		
 		<c:if test="${user!=null}">
-			<a href='javascript:glk( ${param.topicid }  )'>点赞</a> 
+			<a id="agree" href='javascript:glk( ${param.topicid }  )'>点赞</a> 
+		</c:if>
+		<c:if test="${user!=null}">
+			<a id="disagree" href='javascript:glk( ${param.topicid }  )' style="display: none;">取消点赞</a> 
 		</c:if>
 		<div id="collectmsg" style="width: 200px;line-height: 30px;background-color: #fff;text-align: center;position: absolute;left: 45%;top:28%;border: 2px solid #E0F0F9; ">
 				${msg }
@@ -183,6 +213,11 @@
 						</c:if>
 						
 						
+						<br/>
+						<c:if test="${user!=null}">
+							<a href="javascript:void(0)" onclick="">点赞</a>
+						</c:if>
+						<font id="replygreed">点赞数：${reply.agreecount}</font>
 					</DIV>
 				</TH>
 			</TR>

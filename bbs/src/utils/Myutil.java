@@ -135,8 +135,7 @@ public class Myutil {
  */
 	public static String sendemail(String email) {
 		// 随机生成验证码
-	
-		String code = String.valueOf((int)(Math.random()*9+1)*100000);
+		String code = String.valueOf((int)(Math.random()*99999)+10000);
 		// 以下变量为用户根据自己的情况设置
 		String smtphost = "smtp.qq.com"; // 发送邮件服务器
 		String user = "869872053@qq.com"; // 邮件服务器登录用户名

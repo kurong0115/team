@@ -4,7 +4,7 @@
  <%@ include file="header.jsp"%>
 
 	<!--      主体        -->
-	<DIV class="t">
+	<DIV class="t" >
 		<TABLE cellSpacing="0" cellPadding="0" width="100%">
 			<TR class="tr2" align="center">
 				<TD colSpan="2">论坛</TD>

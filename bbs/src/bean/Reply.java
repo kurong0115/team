@@ -106,11 +106,13 @@ public class Reply extends PageBean<Reply> implements Serializable {
 	private String head;
 	private String regtime;
 
+
 	@Override
 	public String toString() {
 		return "Reply [replyid=" + replyid + ", content=" + content + ", publishtime=" + publishtime + ", modifytime="
 				+ modifytime + ", uid=" + uid + ", topicid=" + topicid + ", agreecount=" + agreecount + ", uname="
 				+ uname + ", head=" + head + ", regtime=" + regtime + "]";
 	}
+
 
 }
