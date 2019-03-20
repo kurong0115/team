@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -196,7 +198,7 @@ public class Myutil {
 		String to = email; // 接受人邮件地址
 		String subject = "BBS"; // 邮件标题
 		// 邮件内容
-		String body = "亲爱的用户,你已被禁言,禁言截止时间" + time + "请注意保护好个人信息！";
+		String body = "亲爱的用户,你已被禁言,禁言截止时间" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time.getTime())) + "请注意保护好个人信息！";
 		// 以下为发送程序，用户无需改动
 		try {
 			// 初始化Properties类对象

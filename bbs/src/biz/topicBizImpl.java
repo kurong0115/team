@@ -1,7 +1,9 @@
 package biz;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +26,7 @@ public class topicBizImpl {
 	private UserDao ud=new UserDao();
 	private StopDao sd=new StopDao();
 	private JDBCHelp db=new JDBCHelp();
+	private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private  UserInfo info;
 	/**
 	 * ��ѯ��ǰ��������topic
@@ -61,7 +64,7 @@ public class topicBizImpl {
 			}
 			if(userinfo.getEndtime()!=null&&userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
 				System.out.println("您已被禁言");
-				throw new BizException("您已被禁言,禁言结束时间为"+userinfo.getEndtime());			
+				throw new BizException("您已被禁言,禁言结束时间为"+sdf.format(new Date(userinfo.getEndtime().getTime())));			
 			}
 		}		
 		this.setUserinfo(userinfo);

@@ -1,6 +1,8 @@
 package biz;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +10,7 @@ import bean.PageBean;
 import bean.Reply;
 import bean.Topic;
 import bean.UserInfo;
+import dao.ReplyDao;
 import dao.StopDao;
 import dao.UserDao;
 import utils.JDBCHelp;
@@ -17,6 +20,8 @@ public class replyBizImpl {
 	private JDBCHelp db=new JDBCHelp();
 	private UserDao ud=new UserDao();
 	private StopDao sd=new StopDao();
+	private ReplyDao rd=new ReplyDao();
+	private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private  UserInfo info;
 	
 	public UserInfo getUserinfo() {
@@ -43,7 +48,7 @@ public class replyBizImpl {
 			}
 			if(userinfo.getEndtime()!=null&&userinfo.getEndtime().after(new Timestamp(System.currentTimeMillis()))) {
 				System.out.println("您已被禁言");
-				throw new BizException("您已被禁言,禁言结束时间为"+userinfo.getEndtime());			
+				throw new BizException("您已被禁言,禁言结束时间为"+sdf.format(new Date(userinfo.getEndtime().getTime())));			
 			}
 		}
 		this.setUserinfo(userinfo);
@@ -85,7 +90,7 @@ public class replyBizImpl {
 //		topic.setTitle(afterTitle);
 		topic.setContent(afterContent);
 //		this.userinfo=userinfo;
-		String sql="insert into tbl_reply values(null,null,?,now(),now(),?,?)";
+		String sql="insert into tbl_reply values(null,null,?,now(),now(),?,?,0)";
 		return db.executeUpdate(sql, topic.getContent(),topic.getUid(),topic.getTopicid());
 	}
 	
@@ -98,7 +103,7 @@ public class replyBizImpl {
 				"    date_format(modifytime,'%Y-%m-%d %H:%i:%s') as modifytime, tbl_reply.uid, topicid,\r\n" + 
 				"    uname,\r\n" + 
 				"    head,\r\n" + 
-				"    date_format(regtime,'%Y-%m-%d %H:%i:%i') as  regtime\r\n" + 
+				"    date_format(regtime,'%Y-%m-%d %H:%i:%i') as  regtime,agreecount\r\n" + 
 				"from tbl_reply\r\n" + 
 				"inner join tbl_user\r\n" + 
 				"on tbl_reply.uid=tbl_user.uid\r\n" + 
@@ -159,5 +164,35 @@ public class replyBizImpl {
 
 		return pb;
 		
+	}
+	
+	/**
+	 * 点赞数加一
+	 * @param uid
+	 * @param replyId
+	 * @return
+	 */
+	public int agree(String topicId, String replyId) {
+		return rd.agree(topicId, replyId);
+	}
+	
+	/**
+	 * 根据回帖Id查询点赞的数目
+	 * @param replyId
+	 * @return
+	 */
+	public int selectAgreeCount(String replyId) {
+		List<Map<String,Object>> list=rd.selectAgreeCount(replyId);
+		return Integer.valueOf(list.get(0).get("agreecount").toString());
+	}
+	
+	/**
+	 * 赞的数目减一
+	 * @param topicId
+	 * @param replyId
+	 * @return
+	 */
+	public Integer disagree(String topicId, String replyId) {
+		return rd.disagree(topicId, replyId);
 	}
 }

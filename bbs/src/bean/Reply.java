@@ -15,6 +15,15 @@ public class Reply extends PageBean<Reply> implements Serializable {
 	private String modifytime;
 	private Integer uid;
 	private Integer topicid;
+	private Integer agreecount;
+
+	public Integer getAgreecount() {
+		return agreecount;
+	}
+
+	public void setAgreecount(Integer agreecount) {
+		this.agreecount = agreecount;
+	}
 
 	public Integer getReplyid() {
 		return replyid;
@@ -100,10 +109,8 @@ public class Reply extends PageBean<Reply> implements Serializable {
 	@Override
 	public String toString() {
 		return "Reply [replyid=" + replyid + ", content=" + content + ", publishtime=" + publishtime + ", modifytime="
-				+ modifytime + ", uid=" + uid + ", topicid=" + topicid + ", uname=" + uname + ", head=" + head
-				+ ", regtime=" + regtime + "]";
+				+ modifytime + ", uid=" + uid + ", topicid=" + topicid + ", agreecount=" + agreecount + ", uname="
+				+ uname + ", head=" + head + ", regtime=" + regtime + "]";
 	}
-
-	
 
 }

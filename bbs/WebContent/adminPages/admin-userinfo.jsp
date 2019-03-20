@@ -72,30 +72,6 @@ function getPostManage(value,row,index){
 }
 
 function releaseById(url){
-	/*var request;
-	if(windows.XmlHttpRequest){
-		request=new XmlHttpRequest();
-	}else if(windows.ActiveXObject){
-		request=new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	
-	request.open("post",url,true);	
-	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-
-	request.onreadystatechange=function(){
-		if(request.readystate==4){
-			if(request.status=200){
-				var result=request.responseText;
-				if(result=="解除成功"){
-					alert("解除成功");
-				}else{
-					alert("解除失败");
-				}
-			}
-		}
-	}
-
-	request.send();*/
 	$(function(){
 		$.ajax({
 			async:true,

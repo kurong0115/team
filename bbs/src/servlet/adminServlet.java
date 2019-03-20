@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import com.alibaba.fastjson.JSON;
 
 import bean.TblAdmin;
+import bean.UserInfo;
 import biz.adminBizImpl;
 import dao.UserDao;
 
@@ -127,6 +128,7 @@ public class adminServlet extends HttpServlet {
 		private void releaseById(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			String uid=request.getParameter("uid");
 			int num=abi.releaseById(Integer.valueOf(uid));
+			request.getSession().setAttribute("userinfo", (UserInfo)ud.selectAll(Integer.valueOf(uid)));
 			if(num>0) {
 				System.out.println("删除成功");
 				response.getWriter().write("解除成功");

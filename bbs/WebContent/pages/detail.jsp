@@ -35,7 +35,43 @@
 		 	}
 		});
 	}   
-
+	
+	function agree(topicid,replyid){
+		$(function(){
+			$.ajax({
+				url:"<%=request.getContextPath() %>/reply?flag=agree&replyid="+replyid+"&topicid="+topicid,
+				async:true,
+				method:"get",
+				dataType:"text",
+				success:function(data){
+					if(data!=null){
+						$("#"+replyid).prev().show();
+						$("#"+replyid).hide();
+						$("#"+replyid).next().html(data);
+					}
+				}
+			})
+		})
+	}
+	
+	function disagree(topicid,replyid){
+		$(function(){
+			$.ajax({
+				url:"<%=request.getContextPath() %>/reply?flag=disagree&replyid="+replyid+"&topicid="+topicid,
+				async:true,
+				method:"get",
+				dataType:"text",
+				success:function(data){
+					if(data!=null){
+						$("#"+replyid).show();
+						$("#"+replyid).prev().hide();
+						$("#"+replyid).next().html(data);
+					}
+				}
+			})
+		})
+	}
+	
 	$(function() {	
 			$("#collectmsg").fadeIn(2000);
 			$("#collectmsg").fadeOut(3000);		
@@ -107,6 +143,7 @@
 				</TH>
 				<TH>
 					<H4>帖名：${topicdetail.title}</H4>
+					
 					<DIV>内容：${topicdetail.content}</DIV>
 					<DIV class="tipad gray">
 						发表：[${topicdetail.publishtime}] &nbsp;
@@ -125,11 +162,19 @@
 			<TR class="tr1">
 				<TH style="WIDTH: 20%">
 					<B>回帖人：${reply.uname}</B><BR/><BR/>
+					
 					<image src="image/head/${reply.head}"/><BR/>
 					注册:${reply.regtime}<BR/>
 				</TH>
 				<TH>
 					<DIV>回帖内容：${reply.content}</DIV>
+ 					<div>
+ 						<a onclick="disagree(${reply.topicid},${reply.replyid })">取消点赞</a>
+ 						<a id='${reply.replyid}' onclick="agree(${reply.topicid},${reply.replyid })">点赞</a>						
+ 						点赞数:<span>${reply.agreecount }</span>
+ 						<script>$("#"+${reply.replyid}).prev().hide();</script>
+ 					</div>
+					
 					<DIV class="tipad gray">
 						发表：[${reply.publishtime}] &nbsp;
 						最后修改:[${reply.modifytime}]

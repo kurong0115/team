@@ -58,8 +58,45 @@ public class replyServlet extends HttpServlet {
 		case "glk":
 			glk(request, response);
 			break;
+		case "agree":
+			agree(request,response);
+			break;
+		case "disagree":
+			disagree(request,response);
+			break;
 		default:
 			break;
+		}
+	}
+
+	private void disagree(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String topicId=request.getParameter("topicid");
+		String replyId=request.getParameter("replyid");
+		Integer num=rbi.disagree(topicId,replyId);
+		Integer count=rbi.selectAgreeCount(replyId);
+		System.out.println(count);
+		if(num>0) {			
+			System.out.println(num);
+			response.getWriter().write(count.toString());
+		}
+	}
+
+
+	/**
+	 * »ØÌûµãÔÞ
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 */
+	private void agree(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String topicId=request.getParameter("topicid");
+		String replyId=request.getParameter("replyid");
+		Integer num=rbi.agree(topicId,replyId);
+		Integer count=rbi.selectAgreeCount(replyId);
+		System.out.println(count);
+		if(num>0) {			
+			System.out.println(num);
+			response.getWriter().write(count.toString());
 		}
 	}
 
@@ -207,7 +244,6 @@ public class replyServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		doGet(request, response);
 	}
 

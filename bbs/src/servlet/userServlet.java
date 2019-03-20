@@ -259,7 +259,7 @@ public class userServlet extends HttpServlet {
 				session.setAttribute("user", user);
 				UserInfo userinfo=ud.selectAll(user.getUid());
 				session.setAttribute("userinfo", userinfo);
-				ubi.addExpendInfo(user);
+//				ubi.addExpendInfo(user);
 				//判断是否有回调路径
 				if(request.getSession().getAttribute("callbackPath")!=null) {
 					String path = (String) request.getSession().getAttribute("callbackPath");
@@ -289,9 +289,7 @@ public class userServlet extends HttpServlet {
 			request.setAttribute("msg", "验证码错误");
 			request.getRequestDispatcher("pages/login.jsp").forward(request, response);
 			
-		}
-		
-		
+		}		
 	}
 
 
